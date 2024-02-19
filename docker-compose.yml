@@ -41,10 +41,11 @@ services:
     ports:
       - 8000:8000
     volumes:
+      - /app/node_modules
       - ./server:/app
     links:
       - mysql
-    command: npm start
+    # command: npm start
   client:
     build:
       context: ./client
