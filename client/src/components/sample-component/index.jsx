@@ -14,7 +14,7 @@ function callServer() {
 export function SampleComponent() {
   return (
     <div>
-      This is a sample component!
+      This is a sample component ok!
       {callServer()}
     </div>
   );
