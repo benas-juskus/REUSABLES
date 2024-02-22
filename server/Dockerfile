@@ -5,14 +5,14 @@ RUN mkdir -p /app
 WORKDIR /app
 
 COPY . .
+
 COPY package.json /app
+
 COPY package-lock.json /app
 
 RUN npm install
 
-# RUN npm i @prisma/client
-
-# RUN npx prisma generate
+RUN npm install -g nodemon
 
 
 CMD ["npm", "start"]

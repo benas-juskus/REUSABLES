@@ -1,0 +1,15 @@
+{
+  "exclude": [
+    "node_modules"
+  ],
+    "compilerOptions": {
+      "skipLibCheck": true,
+      "strict": true,
+      "rootDir": "./",
+      "noEmit": true,
+      "esModuleInterop": true,
+      "types": ["node"],
+      "module": "CommonJS",
+    },
+    "include": ["server/index.ts"]
+  }
