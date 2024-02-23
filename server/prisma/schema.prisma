@@ -7,18 +7,95 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
-  id    Int    @id @default(autoincrement())
-  name  String
-  posts Post[]
+model users {
+  id             String           @id @default(uuid())
+  role_id        role             @default(USER)
+  username       String
+  email          String           @unique
+  password       String
+  createdAt      DateTime         @default(now())
+  favouriteItems favouriteItems[]
+  items          items[]
+  locations      locations[]
+  notifications  notifications[]
+
+  @@unique([username, email])
+  @@unique([username, password])
 }
 
-model Post {
-  id        Int     @id @default(autoincrement())
-  title     String
-  published Boolean @default(true)
-  authorId  Int
-  author    User    @relation(fields: [authorId], references: [id])
+enum role {
+  USER
+  ADMIN
+}
 
-  @@index([authorId], map: "Post_authorId_fkey")
+model locations {
+  user_id    users  @relation(fields: [usersId], references: [id])
+  usersId    String @id @default(uuid())
+  longtitude String
+  latitude   String
+}
+
+model favouriteItems {
+  user_id users  @relation(fields: [userId], references: [id])
+  item_id items  @relation(fields: [itemsId], references: [id])
+  userId  String @default(uuid())
+  itemsId String @default(uuid())
+
+  @@id([userId, itemsId])
+}
+
+model items {
+  id               String           @id @default(uuid())
+  favouriteItems   favouriteItems[]
+  user_id          users            @relation(fields: [userId], references: [id])
+  userId           String
+  subCategories_id subCategories    @relation(fields: [subCategoriesId], references: [id])
+  subCategoriesId  String
+  exchangeTo       exchangeTo[]
+  name             String
+  description      String
+  photo            String
+  price            Decimal          @db.Decimal(10, 2)
+  for_sale         Boolean
+  exchange         Boolean
+  visibility       Boolean
+  created_at       DateTime         @default(now())
+  updated_at       DateTime         @updatedAt
+  notifications    notifications[]
+}
+
+model subCategories {
+  id           String       @id @default(uuid())
+  category_id  categories   @relation(fields: [categoriesId], references: [id])
+  categoriesId String
+  title        String
+  nr           Int?
+  items        items[]
+  exchangeTo   exchangeTo[]
+}
+
+model categories {
+  id            String          @id @default(uuid())
+  subCategories subCategories[]
+  title         String
+  nr            Int
+}
+
+model exchangeTo {
+  id               String        @id @default(uuid())
+  item_id          items         @relation(fields: [itemsId], references: [id])
+  subCategories_id subCategories @relation(fields: [subCategoriesId], references: [id])
+  itemsId          String
+  subCategoriesId  String
+}
+
+model notifications {
+  id         String   @id @default(uuid())
+  user_id    users    @relation(fields: [usersId], references: [id])
+  item_id    items?   @relation(fields: [itemsId], references: [id])
+  data       String
+  seen       Boolean
+  created_at DateTime @default(now())
+  usersId    String
+  itemsId    String?
 }
