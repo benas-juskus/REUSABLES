@@ -8,16 +8,21 @@ datasource db {
 }
 
 model users {
-  id             String           @id @default(uuid())
-  role_id        role             @default(USER)
-  username       String
-  email          String           @unique
-  password       String
-  createdAt      DateTime         @default(now())
-  favouriteItems favouriteItems[]
-  items          items[]
-  locations      locations[]
-  notifications  notifications[]
+  id                 String           @id @default(uuid())
+  role_id            role             @default(USER)
+  username           String
+  email              String           @unique
+  password           String
+  createdAt          DateTime         @default(now())
+  favouriteItems     favouriteItems[]
+  items              items[]
+  locations          locations[]
+  notifications      notifications[]
+  transactions_user1 transactions[]   @relation("user1")
+  transactions_user2 transactions[]   @relation("user2")
+  offers             offrers[]
+  rating_user        rating[]         @relation("user")
+  rating_rater       rating[]         @relation("rater")
 
   @@unique([username, email])
   @@unique([username, password])
@@ -45,23 +50,25 @@ model favouriteItems {
 }
 
 model items {
-  id               String           @id @default(uuid())
-  favouriteItems   favouriteItems[]
-  user_id          users            @relation(fields: [userId], references: [id])
-  userId           String
-  subCategories_id subCategories    @relation(fields: [subCategoriesId], references: [id])
-  subCategoriesId  String
-  exchangeTo       exchangeTo[]
-  name             String
-  description      String
-  photo            String
-  price            Decimal          @db.Decimal(10, 2)
-  for_sale         Boolean
-  exchange         Boolean
-  visibility       Boolean
-  created_at       DateTime         @default(now())
-  updated_at       DateTime         @updatedAt
-  notifications    notifications[]
+  id                 String           @id @default(uuid())
+  favouriteItems     favouriteItems[]
+  user_id            users            @relation(fields: [userId], references: [id])
+  userId             String
+  subCategories_id   subCategories    @relation(fields: [subCategoriesId], references: [id])
+  subCategoriesId    String
+  exchangeTo         exchangeTo[]
+  name               String
+  description        String
+  photo              String
+  price              Decimal          @db.Decimal(10, 2)
+  for_sale           Boolean
+  exchange           Boolean
+  visibility         Boolean
+  created_at         DateTime         @default(now())
+  updated_at         DateTime         @updatedAt
+  notifications      notifications[]
+  transactions_item1 transactions[]   @relation("item1")
+  transactions_item2 transactions[]   @relation("item2")
 }
 
 model subCategories {
@@ -98,4 +105,57 @@ model notifications {
   created_at DateTime @default(now())
   usersId    String
   itemsId    String?
+}
+
+model transactions {
+  id          String     @id @default(uuid())
+  user1_id    users      @relation("user1", fields: [user1Id], references: [id])
+  user1Id     String
+  user2_id    users      @relation("user2", fields: [user2Id], references: [id])
+  user2Id     String
+  item1_id    items      @relation("item1", fields: [item1Id], references: [id])
+  item1Id     String
+  item2_id    items?     @relation("item2", fields: [item2Id], references: [id])
+  item2Id     String?
+  user1_conf  Boolean
+  user2_conf  Boolean
+  final_price Decimal    @db.Decimal(10, 2)
+  created_at  DateTime   @default(now())
+  offers      offrers[]
+  messages    messages[]
+  rating      rating[]
+}
+
+model offrers {
+  id             String       @id @default(uuid())
+  transaction_id transactions @relation(fields: [transactionId], references: [id])
+  transactionId  String
+  user_id        users        @relation(fields: [userId], references: [id])
+  userId         String
+  offer_amount   Decimal      @db.Decimal(10, 2)
+  created_at     DateTime     @default(now())
+}
+
+model messages {
+  id             String       @id @default(uuid())
+  transaction_id transactions @relation(fields: [transactionId], references: [id])
+  transactionId  String
+  user_nr        Int          @db.TinyInt
+  message        String
+  seen           Boolean      @default(false)
+  created_at     DateTime     @default(now())
+}
+
+model rating {
+  transactionid  transactions @relation(fields: [transaction_id], references: [id])
+  userid         users        @relation("user", fields: [user_id], references: [id])
+  rater          users        @relation("rater", fields: [raterId], references: [id])
+  transaction_id String
+  user_id        String
+  raterId        String
+  rate           Int
+  comment        String
+  created_at     DateTime     @default(now())
+
+  @@id([transaction_id, user_id])
 }

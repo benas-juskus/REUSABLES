@@ -18,8 +18,8 @@ services:
     ports:
       - 3306:3306
     restart: always
-    volumes:
-      - mysql-data:/var/lib/mysql
+    # volumes:
+    #   - mysql-data:/var/lib/mysql
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${MYSQL_ROOT_PASSWORD}"]
       interval: 10s
@@ -89,5 +89,5 @@ services:
 #      - server
 #    command: npm start
 
-volumes:
-  mysql-data:
+# volumes:
+#   mysql-data:

@@ -6,6 +6,15 @@ async function main() {
     const users = await prisma.user.findMany()
     console.log(users)
   }
+// async function add(){
+//   const user = await prisma.user.create({
+//     data: {
+//       username: 'test',
+//       email: "test@mail.com",
+//       password: "123"
+//     }
+//   })
+// }
 
 main()
   .then(async () => {
