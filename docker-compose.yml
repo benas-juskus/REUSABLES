@@ -12,7 +12,7 @@ services:
     environment:
       <<: *common-variables
       MYSQL_HOST: localhost
-      MYSQL_ROOT_PASSWORD: prisma
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
       MYSQL_DATABASE: prisma
     container_name: mysql
     ports:
@@ -20,7 +20,6 @@ services:
     restart: always
     volumes:
       - mysql-data:/var/lib/mysql
-      # - ./db/sample.sql:/docker-entrypoint-initdb.d/sample.sql
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${MYSQL_ROOT_PASSWORD}"]
       interval: 10s
@@ -55,11 +54,9 @@ services:
     volumes:
       - /app/node_modules
       - ./server:/app
-      # - /app:/usr/src/app
     links:
       - mysql
-    # command: npm start
-    command: sh -c "npm i && npx prisma db push && npm run dev"
+    command: sh -c "npm i && npx prisma migrate dev --name init && npm run dev"
   client:
     build:
       context: ./client
@@ -91,5 +88,6 @@ services:
 #    links:
 #      - server
 #    command: npm start
+
 volumes:
   mysql-data:
