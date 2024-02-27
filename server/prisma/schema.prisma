@@ -21,9 +21,9 @@ model users {
   notifications      notifications[]
   transactions_user1 transactions[]   @relation("user1")
   transactions_user2 transactions[]   @relation("user2")
-  offers             offrers[]
-  rating_user        rating[]         @relation("user")
-  rating_rater       rating[]         @relation("rater")
+  offers             offers[]
+  rating_user        ratings[]        @relation("user")
+  rating_rater       ratings[]        @relation("rater")
 
   @@unique([username, email])
   @@unique([username, password])
@@ -122,12 +122,12 @@ model transactions {
   user2_conf  Boolean
   final_price Decimal    @db.Decimal(10, 2)
   created_at  DateTime   @default(now())
-  offers      offrers[]
+  offers      offers[]
   messages    messages[]
-  rating      rating[]
+  rating      ratings[]
 }
 
-model offrers {
+model offers {
   id             String       @id @default(uuid())
   transaction_id transactions @relation(fields: [transactionId], references: [id])
   transactionId  String
@@ -147,7 +147,7 @@ model messages {
   created_at     DateTime     @default(now())
 }
 
-model rating {
+model ratings {
   transactionid  transactions @relation(fields: [transaction_id], references: [id])
   userid         users        @relation("user", fields: [user_id], references: [id])
   rater          users        @relation("rater", fields: [raterId], references: [id])
