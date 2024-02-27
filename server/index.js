@@ -23,17 +23,9 @@ app.listen(process.env.REACT_APP_SERVER_PORT, () => {
 
 app.get('/test', (req, res) => {
   async function main() {
-    // const { table } = prisma.user;
-    const users = await prisma.user.findMany()
+    const users = await prisma.users.findMany()
     console.log(users)
     res.send(users)
-  //   pool.query(`select * from prisma`, (err, results) => {
-  //   if (err) {
-  //     return res.send(err);
-  //   } else {
-  //     return res.send(results);
-  //   }
-  // });
   }
 
 main()
