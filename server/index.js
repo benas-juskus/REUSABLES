@@ -22,11 +22,31 @@ app.listen(process.env.REACT_APP_SERVER_PORT, () => {
 });
 
 app.get('/test', (req, res) => {
+
+  let email = req.query.email;
+  let password = req.query.password;
+  console.log(email, password);
+
   async function main() {
-    const users = await prisma.users.findMany()
-    console.log(users)
-    res.send(users)
+    const user = await prisma.users.findUnique({
+      where: {
+        email: email,
+      }
+    })
+    if (user){
+      console.log('user found', user);
+      if (password == user.password){
+        res.send({user, message: 'user is logged in', passMatch: true})
+      } else {
+        res.send({user, message: 'user is not logged in', passMatch: false, errMsgPass: 'Password does not match'})
+      }
+    } else {
+      res.send({errMsgMail: 'no user with that email'})
+    }
+    
   }
+
+
 
 main()
   .then(async () => {
