@@ -89,7 +89,7 @@ model exchangeTo {
   item_id          items         @relation(fields: [itemsId], references: [id])
   subCategories_id subCategories @relation(fields: [subCategoriesId], references: [id])
   itemsId          Int           @db.UnsignedInt
-  subCategoriesId  Int           @db.UnsignedInt
+  subCategoriesId  Int           @db.UnsignedMediumInt
 }
 
 model notifications {
