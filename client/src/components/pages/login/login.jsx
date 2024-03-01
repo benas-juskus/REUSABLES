@@ -40,7 +40,7 @@ const InputField = styled(TextField)({
     '& .MuiInputBase-input': {
         color: formTheme.palette.primary.dark,
     },
-    width: 300
+    width: '80%'
 });
 
 const Wrapper = styled(Box)({
@@ -53,14 +53,14 @@ const Wrapper = styled(Box)({
 })
 
 const FormWrapper = styled(Box)({
-    width: 400,
+    width: 300,
     position: 'absolute',
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
     backgroundColor: formTheme.palette.secondary.light,
     borderRadius: 7,
-    padding: '0 0px 30px 30px',
+    padding: '0 30px 30px 30px',
     // paddingRight: 50,
     display: 'flex',
     flexDirection: 'column',
@@ -117,7 +117,6 @@ const Login = () => {
         if (response.data.user) {
             setErrMsgMail("");
             console.log(response.data.message);
-            // console.log(user.data.user.username);
             console.log(response.data.passMatch);
             console.log(response.data.errMsgPass);
             console.log(response.data.errMsgMail);
@@ -135,7 +134,7 @@ const Login = () => {
     return (
         <Wrapper>
             <FormWrapper>
-                <img src="./Logo-main-no-bg.png" alt="" />
+                <img src="./assets/logos/Logo-main-no-bg.png" alt="logo" width= '80%' style={{margin: '-120px auto 0'}}/>
                 <Formik
                     onSubmit={handleFormSubmit}
                     initialValues={initialValues}
@@ -143,7 +142,7 @@ const Login = () => {
                 >
                     {({values, errors, touched, handleBlur, handleChange, handleSubmit, isSubmitting}) => ( 
                         <form onSubmit={handleSubmit} className='form'>
-                            <Box width={300} sx={{ mb: 2, mt: 4, width:'fit-content', display: 'flex' }}>
+                            <Box width={300} sx={{mt: 2, mb: 2, width:'100%', display: 'flex' }}>
                                 <EmailIcon sx={{ color: 'action.active', mr: 1, mt: 2 }} />
                                 <InputField
                                     size="small" 
@@ -158,7 +157,7 @@ const Login = () => {
                                     onBlur={handleBlur}
                                 />
                             </Box>
-                            <Box width={300} sx={{ mb: 1, mt: 1, width:'fit-content', display: 'flex' }}>
+                            <Box width={300} sx={{ mb: 1, mt: 1, width:'100%', display: 'flex' }}>
                                 <KeyIcon sx={{ color: 'action.active', mr: 1, mt: 2 }} />
                                 <InputField 
                                     size="small" 
@@ -173,9 +172,12 @@ const Login = () => {
                                     onBlur={handleBlur}
                                 />
                             </Box>
-                            {/* <Link to="#">Forgot Password?</Link> */}
-                            <p style={{margin:'0 70px',alignSelf: 'flex-end'}}>Forgot Password?</p>
+                            <Link to="/forgot-password" style={{margin:'0 30px',alignSelf: 'flex-end', color: '#638889', }}>Forgot Password?</Link>
                             <StyledButton type="submit" variant="contained" disabled={isSubmitting}>Sign In</StyledButton>
+                            <Box sx={{ mt: 2, display: 'flex', justifyContent: 'start'}}>
+                                <p style={{margin:0}}>Don't have an account?</p>
+                                <Link to="/signup" style={{margin:'0 10px', color: '#638889', }}>Sign Up</Link>
+                            </Box>
                         </form>
                     )}
                 </Formik>
