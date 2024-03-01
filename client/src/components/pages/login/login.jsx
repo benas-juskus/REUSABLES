@@ -9,6 +9,7 @@ import EmailIcon from '@mui/icons-material/Email';
 import KeyIcon from '@mui/icons-material/Key';
 import styled from "@emotion/styled";
 import Axios  from 'axios';
+import { Link } from 'react-router-dom'
 
 // styled elements and color theme
 const formTheme = createTheme({
@@ -38,7 +39,8 @@ const InputField = styled(TextField)({
     },
     '& .MuiInputBase-input': {
         color: formTheme.palette.primary.dark,
-    }
+    },
+    width: 300
 });
 
 const Wrapper = styled(Box)({
@@ -65,11 +67,11 @@ const FormWrapper = styled(Box)({
     alignItems: 'flex-start',
     boxShadow: '3px 3px 10px rgba(0, 0, 0, 0.2)',
     ".form ": {
-        width: 'fit-content',
+        width: '100%',
         display: 'flex',
         flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
+        alignItems: 'flex-start',
+        // justifyContent: 'center',
     },
 })
 
@@ -141,7 +143,7 @@ const Login = () => {
                 >
                     {({values, errors, touched, handleBlur, handleChange, handleSubmit, isSubmitting}) => ( 
                         <form onSubmit={handleSubmit} className='form'>
-                            <Box width={300} sx={{ mx: 'auto', mb: 2, mt: 4, width:'fit-content' }}>
+                            <Box width={300} sx={{ mb: 2, mt: 4, width:'fit-content', display: 'flex' }}>
                                 <EmailIcon sx={{ color: 'action.active', mr: 1, mt: 2 }} />
                                 <InputField
                                     size="small" 
@@ -156,7 +158,7 @@ const Login = () => {
                                     onBlur={handleBlur}
                                 />
                             </Box>
-                            <Box width={300} sx={{ mx: 'auto', mb: 3, mt: 1, width:'fit-content' }}>
+                            <Box width={300} sx={{ mb: 1, mt: 1, width:'fit-content', display: 'flex' }}>
                                 <KeyIcon sx={{ color: 'action.active', mr: 1, mt: 2 }} />
                                 <InputField 
                                     size="small" 
@@ -171,6 +173,8 @@ const Login = () => {
                                     onBlur={handleBlur}
                                 />
                             </Box>
+                            {/* <Link to="#">Forgot Password?</Link> */}
+                            <p style={{margin:'0 70px',alignSelf: 'flex-end'}}>Forgot Password?</p>
                             <StyledButton type="submit" variant="contained" disabled={isSubmitting}>Sign In</StyledButton>
                         </form>
                     )}
