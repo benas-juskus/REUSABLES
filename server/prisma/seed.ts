@@ -1,50 +1,38 @@
 import { PrismaClient } from "@prisma/client";
 
-import FakeUser from './fakeUser';
+import FakeUser from './seeders/fakeUser';
+import roles from './seeders/roles';
 // import FakeItem from './fakeItem';
 // import FakeCategory from './fakeCategory';
 // import FakeSubCategory from './fakeSubCategory';
 
 const prisma = new PrismaClient();
 
-// async function main() {
-//   const users = FakeUser.createMany(10);
-//   console.log(users);
-// }
-
 async function main() {
-
-  try {
-    const create_roles = await prisma.role.createMany({
-      data: [
-        {title: "user"},
-        {title: "admin"},
-        {title: "moderator"}
-      ]
-    });
+  prisma.role.createMany({
+    data: roles
+  })
+  .then(create_roles => {
     if (create_roles) {
-      try {
-        const users_list = FakeUser.createMany(10);
-        console.log(users_list);
-        const create_users = await prisma.users.createMany({
-          data: users_list
-        });
-      } catch (error) {
-        console.log(error);
-      }
+      const users_list = FakeUser.createMany(10);
+      console.log(users_list);
+      prisma.users.createMany({
+        data: users_list
+      })
+      .then(create_users => {
+        console.log(create_users);
+      })
+      .catch(error => {
+        console.error(error);
+      });
     }
-  }
-  catch (error) {
-    console.log(error);
-  }
+  })
+  .catch(error => {
+    console.error(error);
+  });
 }
 
-main()
-  .catch(e => {
-    console.error(e);
-    process.exit(1);
-  })
-  .finally(async () => {
+main().finally(async () => {
     await prisma.$disconnect();
   });
 
