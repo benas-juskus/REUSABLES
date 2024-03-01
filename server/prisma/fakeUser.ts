@@ -21,7 +21,7 @@ const FakeUser = {
     create: function(): User {
         return {
             id: faker.number.int(),
-            roleId: faker.number.int(),
+            roleId: faker.number.int({ min: 0, max: 5 }),
             username: faker.internet.userName(),
             email: faker.internet.email(),
             password: faker.internet.password(),
