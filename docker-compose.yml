@@ -11,40 +11,41 @@ services:
     image: mysql:8.0
     environment:
       <<: *common-variables
-      MYSQL_HOST: localhost
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
       MYSQL_DATABASE: prisma
     container_name: mysql
     ports:
       - 3306:3306
     restart: always
-    volumes:
-      - mysql-data:/var/lib/mysql
+    # volumes:
+    #   - mysql-data:/var/lib/mysql
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${MYSQL_ROOT_PASSWORD}"]
+      test: ["CMD", "mysqladmin", "ping", "-h", "mysql", "-u", "root", "-p${MYSQL_ROOT_PASSWORD}"]
       interval: 10s
       retries: 10
+    networks:   # Specify the network here
+      - REUSABLES
+
   phpmyadmin:
     depends_on:
       - mysql
     image: phpmyadmin/phpmyadmin
     environment:
       PMA_HOST: mysql
-    links:
-      - mysql:mysql
     ports:
       - 8080:80
     restart: always
+    networks:
+      - REUSABLES
+
   server:
     build: ./server
     depends_on:
       mysql:
         condition: service_healthy
-    expose:
-      - 8000
     environment:
       <<: *common-variables
-      MYSQL_HOST: localhost
+      MYSQL_HOST: mysql
       MYSQL_USER: prisma
       MYSQL_PASSWORD: prisma
       MYSQL_DATABASE: prisma
@@ -54,9 +55,10 @@ services:
     volumes:
       - /app/node_modules
       - ./server:/app
-    links:
-      - mysql
-    command: sh -c "npm i && npx prisma migrate dev --name init && npm run dev"
+    command: sh -c "npm i && npx prisma migrate dev --name init && npx prisma db seed && npm run dev"
+    networks:
+      - REUSABLES
+
   client:
     build:
       context: ./client
@@ -67,27 +69,9 @@ services:
       - ./client/public:/home/node/app/public
       - ./client/src:/home/node/app/src
       - ./client/package.json:/home/node/app/package.json
-    links:
-      - server
-    tty: true
-    environment:
-      NODE_ENV: 'development'
-#  client:
-#    build: ./client
-#    environment:
-#      <<: *common-variables
-#      NODE_PATH: src
-#    expose:
-#      - 3000
-#    ports:
-#      - 3000:3000
-#    stdin_open: true
-#    tty: true
-#    volumes:
-#      - ./client/src:/app/src
-#    links:
-#      - server
-#    command: npm start
+    networks:
+      - REUSABLES
 
-volumes:
-  mysql-data:
+networks:
+  REUSABLES:   # Define the REUSABLES network
+    driver: bridge
