@@ -1,9 +1,7 @@
 import { useState } from "react";
-// import Input from "../../inputs/name/input";
-import Box from '@mui/material/Box';
 import {Formik} from 'formik'
 import * as Yup from 'yup'
-import { createTheme, Button } from "@mui/material";
+import { createTheme, Button, Box} from "@mui/material";
 import TextField from '@mui/material/TextField';
 import EmailIcon from '@mui/icons-material/Email';
 import KeyIcon from '@mui/icons-material/Key';
@@ -49,10 +47,14 @@ const Wrapper = styled(Box)({
     backgroundRepeat: 'no-repeat', 
     backgroundPosition: 'bottom', 
     height: '100vh',
-    position: 'relative'
+    width: '100vw',
+    position: 'relative',
+    '@media (max-width: 600px)': {
+        backgroundSize: 'cover', 
+    },
 })
 
-const FormWrapper = styled(Box)({
+const FormWrapper = styled(Box) ({
     width: 300,
     position: 'absolute',
     top: '50%',
@@ -61,20 +63,22 @@ const FormWrapper = styled(Box)({
     backgroundColor: formTheme.palette.secondary.light,
     borderRadius: 7,
     padding: '0 30px 30px 30px',
-    // paddingRight: 50,
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'flex-start',
     boxShadow: '3px 3px 10px rgba(0, 0, 0, 0.2)',
+    '@media (max-width: 600px)': {
+        position: 'relative',
+        width: 'calc(100% - 60px)',
+        borderRadius: 0,
+    },
     ".form ": {
         width: '100%',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'flex-start',
-        // justifyContent: 'center',
     },
 })
-
 const StyledButton = styled(Button)({
     backgroundColor: formTheme.palette.primary.main,
     color: 'white',
@@ -92,16 +96,12 @@ const Login = () => {
     const [errMsgPass, setErrMsgPass] = useState("");
     const [errMsgMail, setErrMsgMail] = useState("");
 
-
-
-        // initial login credentials
+    // initial login credentials
     const initialValues = {
         email: "",
         password: "",
-        // remember: true
     };
   
-
     // form field validation schema
     const validationSchema = Yup.object().shape({
         password: Yup.string()
@@ -113,13 +113,9 @@ const Login = () => {
   const handleFormSubmit = async (values) => {
     console.log("Form Values:", values);
     try {
-        const response = await Axios.get("/test", {params: {email: values.email, password: values.password}});
+        const response = await Axios.post("/test", {email: values.email, password: values.password});
         if (response.data.user) {
             setErrMsgMail("");
-            console.log(response.data.message);
-            console.log(response.data.passMatch);
-            console.log(response.data.errMsgPass);
-            console.log(response.data.errMsgMail);
             if (response.data.errMsgPass) {
                 setErrMsgPass(response.data.errMsgPass);
             } else setErrMsgPass("");
@@ -133,8 +129,8 @@ const Login = () => {
 
     return (
         <Wrapper>
-            <FormWrapper>
-                <img src="./assets/logos/Logo-main-no-bg.png" alt="logo" width= '80%' style={{margin: '-120px auto 0'}}/>
+            <FormWrapper >
+                <img src="./assets/logos/Logo-main-no-bg.png" alt="logo" width= '250px' style={{margin: '-120px auto 0'}}/>
                 <Formik
                     onSubmit={handleFormSubmit}
                     initialValues={initialValues}
@@ -172,7 +168,7 @@ const Login = () => {
                                     onBlur={handleBlur}
                                 />
                             </Box>
-                            <Link to="/forgot-password" style={{margin:'0 30px',alignSelf: 'flex-end', color: '#638889', }}>Forgot Password?</Link>
+                            <Link to="/forgot-password" style={{margin:'0 11% 0 0',alignSelf: 'flex-end', color: '#638889', }}>Forgot Password?</Link>
                             <StyledButton type="submit" variant="contained" disabled={isSubmitting}>Sign In</StyledButton>
                             <Box sx={{ mt: 2, display: 'flex', justifyContent: 'start'}}>
                                 <p style={{margin:0}}>Don't have an account?</p>

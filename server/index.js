@@ -1,6 +1,7 @@
 const cors = require('cors');
 const express = require('express');
 const mysql = require('mysql');
+const bodyParser = require('body-parser');
 
 const { PrismaClient } = require("@prisma/client");
 
@@ -16,15 +17,17 @@ const pool = mysql.createPool({
 });
 
 app.use(cors());
+app.use(bodyParser.json());
 
 app.listen(process.env.REACT_APP_SERVER_PORT, () => {
   console.log(`App server now listening on port ${process.env.REACT_APP_SERVER_PORT}`);
 });
 
-app.get('/test', (req, res) => {
+app.post('/test', (req, res) => {
 
-  let email = req.query.email;
-  let password = req.query.password;
+  console.log('request body', req.body);
+  let email = req.body.email;
+  let password = req.body.password;
   console.log(email, password);
 
   async function main() {
@@ -43,10 +46,7 @@ app.get('/test', (req, res) => {
     } else {
       res.send({errMsgMail: 'no user with that email'})
     }
-    
   }
-
-
 
 main()
   .then(async () => {
