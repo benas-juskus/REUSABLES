@@ -10,13 +10,13 @@ interface User {
 }
 
 const FakeUser = {
-    password: bcrypt.hashSync("password", 10), 
+    // password: bcrypt.hashSync("password", 10), 
     create: function(): User {
         return {
             roleId: faker.number.int({ min: 1, max: 3 }),
             username: faker.internet.userName(),
             email: faker.internet.email(),
-            password: faker.internet.password(),
+            password: bcrypt.hashSync("password", 10),
             createdAt: faker.date.past()
         };
     },
