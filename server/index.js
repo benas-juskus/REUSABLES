@@ -25,17 +25,24 @@ app.listen(3001, () => {
 
 var bcrypt = require('bcryptjs');
 
+//Pavydziai:
+//Šifravimo ilgume irašomas skaičius kuris nurodo kiek kartu praeis šifravimo ciklą (Iprastai skaičius 10). kuo didesnis skaičius tuo slaptažodis saugesnis, bet vietos irgi daugiau užims
+password: bcrypt.hashSync('SLAPTAZODIS', 'Šifravimo ilgumas')
+//Slaptažodžių palyginimas
+//Palyginą vartotojo ivesta slaptažodi su šifruotu slaptažodžiu iš DB
+//Jeigu slaptažodis teisingas gražins 'true' jeigu ne 'false'
+bcrypt.compareSync('SLAPTAZODIS', 'SLAPTAZODIS IS DB')
 
 
+//Sukurti vartotoja
 app.get('/test', (req, res) => {
   async function main() {
     const prisma = new PrismaClient();
     
     try {
-      await prisma.$connect(); // Connect to the database
+      await prisma.$connect();
       console.log('Prisma client connected successfully.');
   
-      // Perform database operation to create a user
       const user = await prisma.users.create({
         data: {
           username: 'david',
@@ -48,7 +55,7 @@ app.get('/test', (req, res) => {
       console.error('Error during Prisma client initialization:', error);
     } finally {
       res.json(prisma.users.findMany({})),
-      await prisma.$disconnect(); // Disconnect from the database
+      await prisma.$disconnect();
     }
   }
   
@@ -62,16 +69,15 @@ app.get('/test', (req, res) => {
 
 
   
-
+  //Slaptažodžio palyginimas
   app.get('/check', (req, res) => {
     async function main() {
       const prisma = new PrismaClient();
       
       try {
-        await prisma.$connect(); // Connect to the database
+        await prisma.$connect();
         console.log('Prisma client connected successfully.');
     
-        // Perform database operation to create a user
         const user = await prisma.users.findMany({});
 
         if (bcrypt.compareSync('kevin123', user[1].password)) {
@@ -90,7 +96,7 @@ app.get('/test', (req, res) => {
       } catch (error) {
         console.error('Error during Prisma client initialization:', error);
       } finally {
-        await prisma.$disconnect(); // Disconnect from the database
+        await prisma.$disconnect();
       }
     }
     
