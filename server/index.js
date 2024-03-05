@@ -27,11 +27,14 @@ var bcrypt = require('bcryptjs');
 
 //Pavydziai:
 //Šifravimo ilgume irašomas skaičius kuris nurodo kiek kartu praeis šifravimo ciklą (Iprastai skaičius 10). kuo didesnis skaičius tuo slaptažodis saugesnis, bet vietos irgi daugiau užims
-password: bcrypt.hashSync('SLAPTAZODIS', 'Šifravimo ilgumas')
+
+// password: bcrypt.hashSync('SLAPTAZODIS', 'Šifravimo ilgumas')
+
 //Slaptažodžių palyginimas
 //Palyginą vartotojo ivesta slaptažodi su šifruotu slaptažodžiu iš DB
 //Jeigu slaptažodis teisingas gražins 'true' jeigu ne 'false'
-bcrypt.compareSync('SLAPTAZODIS', 'SLAPTAZODIS IS DB')
+
+// bcrypt.compareSync('SLAPTAZODIS', 'SLAPTAZODIS IS DB')
 
 
 //Sukurti vartotoja
