@@ -81,6 +81,8 @@ app.get('/', (req:Request, res:Response) => {
 
 const CategoriesRouter = require("./routes/CategoriesRoute")
 app.use("/categories/", CategoriesRouter)
+const SubCategoriesRouter = require("./routes/SubCategoriesRoute")
+app.use("/categories/:idi/subcategories", SubCategoriesRouter)
 
 app.listen(port, () => {
     console.log(`Server listening on port ${port}`)

@@ -55,7 +55,7 @@ module.exports = {
           nr: nr,
         },
       });
-      res.status(201).json(category);
+      res.status(201).json({ status: "created succesfully", data: {category}});
     } catch (error) {
       if (hasMessage(error)) {
         res.status(500).json({ msg: error.message });
@@ -74,7 +74,7 @@ module.exports = {
           nr: nr,
         },
       });
-      res.status(200).json(category);
+      res.status(200).json({ status: "updated succesfully", data: {category}});
     } catch (error) {
       if (hasMessage(error)) {
         res.status(500).json({ msg: error.message });
@@ -88,7 +88,7 @@ module.exports = {
           id: Number(req.params.id),
         },
       });
-      res.status(200).json(category);
+      res.status(200).json({ status: "deleted succesfully", data: {category}});
     } catch (error) {
       if (hasMessage(error)) {
         res.status(500).json({ msg: error.message });
