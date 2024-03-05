@@ -10,6 +10,7 @@
       "esModuleInterop": true,
       "types": ["node"],
       "module": "CommonJS",
+      "lib": ["es2015.promise", "es2015", "dom"],
     },
     // "include": ["server/index.ts"]
   }

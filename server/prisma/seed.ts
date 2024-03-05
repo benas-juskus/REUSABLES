@@ -1,23 +1,38 @@
 import { PrismaClient } from "@prisma/client";
 
+import FakeUser from './seeders/fakeUser';
+import roles from './seeders/roles';
+// import FakeItem from './fakeItem';
+// import FakeCategory from './fakeCategory';
+// import FakeSubCategory from './fakeSubCategory';
+
 const prisma = new PrismaClient();
 
 async function main() {
-    
-    console.log("Seeding...");
-    const user = await prisma.users.create({
-        data: {
-          username: 'kevin',
-          email: 'kevin@mail.com',
-          password: 'kevin123',
-        }
+  prisma.role.createMany({
+    data: roles
+  })
+  .then(create_roles => {
+    if (create_roles) {
+      const users_list = FakeUser.createMany(10);
+      console.log(users_list);
+      prisma.users.createMany({
+        data: users_list
+      })
+      .then(create_users => {
+        console.log(create_users);
+      })
+      .catch(error => {
+        console.error(error);
       });
+    }
+  })
+  .catch(error => {
+    console.error(error);
+  });
 }
 
-main().catch(e => {
-    console.error(e);
-    process.exit(1);
-}).finally(async () => {
+main().finally(async () => {
     await prisma.$disconnect();
-})
+  });
 

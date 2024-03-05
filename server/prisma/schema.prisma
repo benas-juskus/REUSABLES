@@ -9,16 +9,16 @@ datasource db {
 
 model users {
   id             Int              @id @default(autoincrement()) @db.UnsignedInt
-  role_id        role             @relation(fields: [roleId], references: [id])
   username       String
   email          String           @unique
   password       String
+  role           role             @relation(fields: [roleId], references: [id])
+  roleId         Int              @db.UnsignedTinyInt
   createdAt      DateTime         @default(now())
   favouriteItems favouriteItems[]
   items          items[]
   locations      locations[]
   notifications  notifications[]
-  roleId         Int              @db.UnsignedTinyInt
   tokens         tokens[]
 
   @@unique([username, email])
