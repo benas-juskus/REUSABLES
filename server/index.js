@@ -17,8 +17,8 @@ const pool = mysql.createPool({
 
 app.use(cors());
 
-app.listen(3001, () => {
-  console.log(`App server now listening on port ${3001}`);
+app.listen(3000, () => {
+  console.log(`App server now listening on port ${3000}`);
 });
 
 
