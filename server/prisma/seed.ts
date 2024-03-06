@@ -9,7 +9,7 @@ import roles from './seeders/roles';
 const prisma = new PrismaClient();
 
 async function main() {
-  prisma.role.createMany({
+  prisma.roles.createMany({
     data: roles
   })
   .then(create_roles => {
