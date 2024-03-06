@@ -55,8 +55,8 @@ services:
     volumes:
       - /app/node_modules
       - ./server:/app
-    # command: sh -c "npm i && npx prisma migrate dev --name init && npx prisma db seed && npm run dev"
-    command: sh -c "npm i && npx prisma migrate dev --name init &&  npm run dev"
+    command: sh -c "npm i && npx prisma migrate dev --name init && npx prisma db seed && npm run dev"
+    # command: sh -c "npm i && npx prisma migrate dev --name init &&  npm run dev"
     networks:
       - REUSABLES
 

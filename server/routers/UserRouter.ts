@@ -1,12 +1,13 @@
-const UserController = require('../controlers/UserControler');
+const UserController = require('../controlers/UserControler.ts');
 const express = require('express');
 const  router  = express.Router();
+const userValidations = require('../requests/UserRequests.ts');
 
 
 
 
-    router.get('/', UserController.createUser);
-    // router.get('/users', UserController.getUsers);
+    router.post('/create', userValidations.createUser, UserController.createUser);
+    router.post('/show', UserController.show);
     // router.get('/users/:id', UserController.getUser);
     // router.put('/users/:id', UserController.updateUser);
     // router.delete('/users/:id', UserController.deleteUser);

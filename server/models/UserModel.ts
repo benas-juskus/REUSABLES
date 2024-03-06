@@ -1,4 +1,3 @@
-// import { PrismaClient } from '@prisma/client';
 const { PrismaClient } = require('@prisma/client');
 
 interface User {
@@ -12,7 +11,7 @@ const prisma = new PrismaClient();
 const User = {
 
     create: async (userdata: User) => {
-        console.log("userdata", userdata);
+        // console.log("userdata", userdata);
         const user = await prisma.users.create({
             data: {
                 username: userdata.username,
@@ -22,12 +21,20 @@ const User = {
             }
         })
     },
-    showUser: async (userdata: User) => {
-        const user = await prisma.users.findUnique({
-            data: {
-                email: userdata.email
+    showOne: async (userdata: User) => {
+        const user = await prisma.users.findFirst({
+            where: {
+                OR:[
+                    { username: userdata.username },
+                    { email: userdata.email }
+                ]
             }
         })
+        return user
+    },
+    showAll: async () => {
+        const users = await prisma.users.findMany()
+        return users
     }
     
 }
