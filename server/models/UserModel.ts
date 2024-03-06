@@ -4,6 +4,7 @@ interface User {
     username?: string;
     email?: string;
     password?: string;
+    confirmPassword?: string;
     role_id?: number;
 }
 const prisma = new PrismaClient();
@@ -22,18 +23,22 @@ const User = {
         })
     },
     showOne: async (userdata: User) => {
+        
         const user = await prisma.users.findFirst({
             where: {
                 OR:[
                     { username: userdata.username },
                     { email: userdata.email }
                 ]
-            }
+            },
+            include: { Role: { select: { title: true }}}
         })
         return user
     },
     showAll: async () => {
-        const users = await prisma.users.findMany()
+        const users = await prisma.users.findMany({
+            include: { Role: { select: { title: true }}}
+        })
         return users
     }
     

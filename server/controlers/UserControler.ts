@@ -1,12 +1,15 @@
 const express = require('express');
 import { validationResult } from 'express-validator'
 import { Request, Response } from 'express';
+import { log } from 'console';
 const UserModel = require('../models/UserModel.ts')
 const bcryptjs = require('bcryptjs');
 
 const UserControler = {
     show: async (req: Request ,res: Response) => {
         const data = req.body;
+        console.log("data", data);
+        
         try {
             const user = await UserModel.showOne(data)
             if (user) {
@@ -37,7 +40,8 @@ const UserControler = {
         const errorMessages = validationResult(req);
 
         if (!errorMessages.isEmpty()) {
-            const errorMsg = errorMessages.array().map(error => error.msg);
+            const errorMsg = errorMessages.array();
+            // const errorMsg = errorMessages.array().map(error => error.msg);
             return res.status(400).json({ errors: errorMsg });
         } else {
             try {
