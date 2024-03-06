@@ -1,7 +1,7 @@
-const roles = [
+const Roles = [
     { title: "user" },
     { title: "admin" },
     { title: "moderator" }
   ];
 
-  export default roles;
+  export default Roles;
