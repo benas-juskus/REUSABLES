@@ -24,9 +24,13 @@ module.exports = {
   },
   getAllSubCategories: async function (req: Request, res: Response) {
     try {
-      const response = await prisma.subCategories.findMany(
-        {include:{Category:true}}
-      );
+      const response = await prisma.subCategories.findMany({
+        include: {
+          Category: {
+            select: { title: true },
+          },
+        },
+      });
       res.status(200).json(response);
     } catch (error) {
       if (hasMessage(error)) {
@@ -39,9 +43,19 @@ module.exports = {
       const response = await prisma.subCategories.findUnique({
         where: {
           id: Number(req.params.id),
+          category_id: Number(req.params.idi),
+        },
+        include: {
+          Category: {
+            select: { title: true },
+          },
         },
       });
-      res.status(200).json(response);
+      if (response == null) {
+        res.status(200).json({ status: response, msg: "No Subcategory Found" });
+      } else {
+        res.status(200).json(response);
+      }
     } catch (error) {
       if (hasMessage(error)) {
         res.status(500).json({ msg: error.message });
@@ -55,7 +69,6 @@ module.exports = {
           category_id: Number(req.params.id),
         },
       });
-      console.log(req.params)
       res.status(200).json(response);
     } catch (error) {
       if (hasMessage(error)) {
@@ -70,10 +83,12 @@ module.exports = {
         data: {
           category_id: category_id,
           title: title,
-          nr: nr
+          nr: nr,
         },
       });
-      res.status(201).json({ status: "created succesfully", data: {subCategory}});
+      res
+        .status(201)
+        .json({ status: "created succesfully", data: { subCategory } });
     } catch (error) {
       if (hasMessage(error)) {
         res.status(500).json({ msg: error.message });
@@ -90,10 +105,12 @@ module.exports = {
         data: {
           category_id: category_id,
           title: title,
-          nr: nr
+          nr: nr,
         },
       });
-      res.status(200).json({ status: "updated succesfully", data: {subCategory}});
+      res
+        .status(200)
+        .json({ status: "updated succesfully", data: { subCategory } });
     } catch (error) {
       if (hasMessage(error)) {
         res.status(500).json({ msg: error.message });
@@ -107,7 +124,26 @@ module.exports = {
           id: Number(req.params.id),
         },
       });
-      res.status(200).json({ status: "deleted succesfully", data: {subCategory}});
+      res
+        .status(200)
+        .json({ status: "deleted succesfully", data: { subCategory } });
+    } catch (error) {
+      if (hasMessage(error)) {
+        res.status(500).json({ msg: error.message });
+      }
+    }
+  },
+  deleteSelectedSubCategories: async function (req: Request, res: Response) {
+    const { ids } = req.body;
+    try {
+      const subCategories = await prisma.subCategories.deleteMany({
+        where: {
+          id: { in: ids },
+        },
+      });
+      res
+        .status(200)
+        .json({ status: "deleted succesfully", data: { subCategories } });
     } catch (error) {
       if (hasMessage(error)) {
         res.status(500).json({ msg: error.message });

@@ -55,7 +55,9 @@ module.exports = {
           nr: nr,
         },
       });
-      res.status(201).json({ status: "created succesfully", data: {category}});
+      res
+        .status(201)
+        .json({ status: "created succesfully", data: { category } });
     } catch (error) {
       if (hasMessage(error)) {
         res.status(500).json({ msg: error.message });
@@ -74,7 +76,9 @@ module.exports = {
           nr: nr,
         },
       });
-      res.status(200).json({ status: "updated succesfully", data: {category}});
+      res
+        .status(200)
+        .json({ status: "updated succesfully", data: { category } });
     } catch (error) {
       if (hasMessage(error)) {
         res.status(500).json({ msg: error.message });
@@ -88,7 +92,26 @@ module.exports = {
           id: Number(req.params.id),
         },
       });
-      res.status(200).json({ status: "deleted succesfully", data: {category}});
+      res
+        .status(200)
+        .json({ status: "deleted succesfully", data: { category } });
+    } catch (error) {
+      if (hasMessage(error)) {
+        res.status(500).json({ msg: error.message });
+      }
+    }
+  },
+  deleteSelectedCategories: async function (req: Request, res: Response) {
+    const { ids } = req.body;
+    try {
+      const categories = await prisma.categories.deleteMany({
+        where: {
+          id: { in: ids },
+        },
+      });
+      res
+        .status(200)
+        .json({ status: "deleted succesfully", data: { categories } });
     } catch (error) {
       if (hasMessage(error)) {
         res.status(500).json({ msg: error.message });

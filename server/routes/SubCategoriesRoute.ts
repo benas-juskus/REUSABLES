@@ -3,9 +3,8 @@ const SubCategoriesController = require("../controller/SubCategoriesController")
 const router = express.Router();
 
 router.get("/first", SubCategoriesController.getSubCategory);
-router.get("/all", SubCategoriesController.getAllSubCategories);
-router.get("/:id", SubCategoriesController.getSubCategoryById);
 router.post("/", SubCategoriesController.createSubCategory);
+router.delete("/delmany", SubCategoriesController.deleteSelectedSubCategories);
 router.patch("/:id", SubCategoriesController.updateSubCategory);
 router.delete("/:id", SubCategoriesController.deleteSubCategory);
 

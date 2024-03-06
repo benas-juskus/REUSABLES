@@ -1,91 +1,37 @@
-// import { PrismaClient } from "@prisma/client";
+import express, { Request, Response } from "express";
+import cors from "cors";
+import * as mysql from "mysql";
+import bodyParser from "body-parser";
+import dotenv from "dotenv";
 
-// const prisma = new PrismaClient();
+dotenv.config();
 
-// async function main() {
+const app = express();
 
-//     // const users = await prisma.users.findMany()
-//     // console.log(users);
-//     try {
-//       const user = await prisma.users.create({
-//         data: {
-//           username: 'kevin',
-//           email: 'kevin@mail.com',
-//           password: 'kevin123',
-//         }
-//       })
-//       console.log(user);
-      
-//     } catch (error) {
-//       console.log(error);
-//     }
+const pool = mysql.createPool({
+  host: process.env.MYSQL_HOST_IP,
+  user: process.env.MYSQL_USER,
+  password: process.env.MYSQL_PASSWORD,
+  database: process.env.MYSQL_DATABASE,
+});
 
-//     }
+app.use(express.json());
+app.use(cors());
+app.use(bodyParser.json());
+app.use(express.json());
+app.get("/", (req: Request, res: Response) => {
+  res.send("Hello World!");
+});
 
+const CategoriesRouter = require("./routes/CategoriesRoute");
+app.use("/categories/", CategoriesRouter);
+const SubCategoriesRouter = require("./routes/SubCategoriesRoute");
+app.use("/categories/:idi/subcategories", SubCategoriesRouter);
 
-// main()
-//   .then(async () => {
-//     await prisma.$disconnect();
-//   })
-//   .catch(async (e) => {
-//     console.error(e);
-//     await prisma.$disconnect();
-//     process.exit(1);
-//   });
+app.listen(process.env.REACT_APP_SERVER_PORT, () => {
+  console.log(
+    `App server now listening on port ${process.env.REACT_APP_SERVER_PORT}`
+  );
+});
 
-// import { PrismaClient } from '@prisma/client';
-
-// async function main() {
-//   const prisma = new PrismaClient();
-  
-//   try {
-//     await prisma.$connect(); // Connect to the database
-//     console.log('Prisma client connected successfully.');
-
-//     // Perform database operation to create a user
-//     const user = await prisma.users.create({
-//       data: {
-//         username: 'kevin',
-//         email: 'kevin@mail.com',
-//         password: 'kevin123',
-//       }
-//     });
-//     console.log('User created:', user);
-//   } catch (error) {
-//     console.error('Error during Prisma client initialization:', error);
-//   } finally {
-//     await prisma.$disconnect(); // Disconnect from the database
-//   }
-// }
-
-// main().catch(error => {
-//   console.error('Error in main function:', error);
-//   process.exit(1);
-// });
-
-// import dotenv from 'dotenv' 
-// dotenv.config()
-import express, {Request, Response} from 'express'
-import cors from 'cors'
-
-const app = express()
-
-const port = process.env.APP_PORT || 8000
-
-app.use(express.json())
-app.use(cors())
-app.use(express.json())
-app.get('/', (req:Request, res:Response) => {
-    res.send('Hello World!')
-})
-
-const CategoriesRouter = require("./routes/CategoriesRoute")
-app.use("/categories/", CategoriesRouter)
-const SubCategoriesRouter = require("./routes/SubCategoriesRoute")
-app.use("/categories/:idi/subcategories", SubCategoriesRouter)
-
-app.listen(port, () => {
-    console.log(`Server listening on port ${port}`)
-})
-
-export default app
+module.exports = app;
