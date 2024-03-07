@@ -1,7 +1,7 @@
 const express = require('express');
 import { validationResult } from 'express-validator'
 import { Request, Response } from 'express';
-import { log } from 'console';
+// import { log } from 'console';
 const UserModel = require('../models/UserModel.ts')
 const bcryptjs = require('bcryptjs');
 
