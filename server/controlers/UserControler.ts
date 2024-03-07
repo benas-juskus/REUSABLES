@@ -71,36 +71,42 @@ const UserControler = {
     update: async (req: Request ,res: Response) => {
         let data = req.body;
         const user_id = req.params.id;
-        // const user_id = parseInt(req.params.id);
-        
+            
+        const errorMessages = validationResult(req);
+            
+            if (!errorMessages.isEmpty()) {
+                const errorMsg = errorMessages.array();
+                // const errorMsg = errorMessages.array().map(error => error.msg);  // <==== Use to send JUST the error messages in response
+                return res.status(400).json({ errors: errorMsg });
+            } else {
+            try {
+                // console.log("body data", data, "params", req.params, typeof user_id);
+                const updatedUser = await UserModel.update(user_id, data);
+                res.status(200).json({user: updatedUser, message: 'User updated successfully!'}); 
+            } catch (error) {
+                console.log(error);
+                res.status(500).json({message: error});
+            }
+        }
+    },
+    updatePassword: async (req: Request ,res: Response) => {
+        const user_id = req.params.id;
+        const hashedPassword = await bcryptjs.hash(req.body.password, 10);
 
-        // try {
-            
-            //     const user = await UserModel.showOne(user_id);
-            //     console.log("user", user);
-            
-            //     data = user ?? req.body;
-            // } catch (error) {
-                //     console.log(error);
-                //     res.status(500).json({message: error})
-                // }
-                
-                
-                const errorMessages = validationResult(req);
-                
-                if (!errorMessages.isEmpty()) {
-                    const errorMsg = errorMessages.array();
-                    // const errorMsg = errorMessages.array().map(error => error.msg);  // <==== Use to send JUST the error messages in response
-                    return res.status(400).json({ errors: errorMsg });
-                } else {
-                try {
-                    console.log("body data", data, "params", req.params, typeof user_id);
-                    const updatedUser = await UserModel.update(user_id, data);
-                    res.status(200).json({user: updatedUser, message: 'User updated successfully!'}); 
-                } catch (error) {
-                    console.log(error);
-                    res.status(500).json({message: error});
-                }
+        const errorMessages = validationResult(req);
+
+        if (!errorMessages.isEmpty()) {
+            const errorMsg = errorMessages.array();
+            // const errorMsg = errorMessages.array().map(error => error.msg);  // <==== Use to send JUST the error messages in response
+            return res.status(400).json({ errors: errorMsg });
+        } else {
+            try {
+                await UserModel.update( user_id, hashedPassword);
+                res.status(200).json({message: 'Password updated successfully!'});
+            } catch (error) {
+                console.log(error);
+                res.status(500).json({message: error});
+            }
         }
     }
 }

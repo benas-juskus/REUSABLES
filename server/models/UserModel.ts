@@ -50,10 +50,16 @@ const User = {
             data: {
                 username: userdata.username,
                 email: userdata.email,
+                password: userdata.password,
                 role_id: userdata.role_id,
             }
         })
-    }
+    },
+    // updatePassword: async (user_id: Number, userdata: User) => {
+    //     const uppdatePassword = await prisma.users.update({
+    //         const 
+    //     })
+    // }
     
 }
 
