@@ -10,7 +10,7 @@ const userValidations = require('../requests/UserRequests.ts');
     router.post('/show', UserController.show);
     router.post('/showall', UserController.showAll);
     // router.get('/users/:id', UserController.getUser);
-    // router.put('/users/:id', UserController.updateUser);
+    router.put('/update/:id', userValidations.updateUser, UserController.update);
     // router.delete('/users/:id', UserController.deleteUser);
 
 module.exports = router
