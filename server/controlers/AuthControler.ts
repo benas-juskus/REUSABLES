@@ -1,9 +1,14 @@
 const express = require('express');
 import { validationResult } from 'express-validator'
 import { Request, Response } from 'express';
+import { PrismaClient } from '@prisma/client';
 const UserModel = require('../models/UserModel.ts')
 const bcryptjs = require('bcryptjs');
 // const { dataValidation } = require('../controlers/UserControler.ts');
+
+const prisma = new PrismaClient();
+
+const createToken = () => require('crypto').randomBytes(64).toString('hex')
 
 
 interface Auth {
@@ -27,28 +32,31 @@ function dataValidation (req: Request) {
 const AuthControler = {
     login: async (req: Request, res: Response) => {
         const data = req.body;
-        // console.log("1");
         
         const validation = dataValidation(req);
         
         if (validation !== true) {
-            // console.log("2");
             return res.status(400).json({validation});
         } else {
             try {
-                // console.log("3");
                 const user = await UserModel.showOne(data);
                 if (!user) {
-                    res.status(404).json({message: 'User with this email does not exist'});
+                    res.status(404).json({message: 'User with this email does not exist', errorFor: 'email'});
                 } else {
                     try {
-                        // console.log("4");
                         const passMatch = await bcryptjs.compare(data.password, user.password);
-                        if ( passMatch){
-                            // console.log("5");
-                            res.status(200).json({user, message: 'user is logged in', passMatch: true});
+                        if ( passMatch ){
+                            const token = await prisma.tokens.create({
+                                data: {
+                                    user_id: user.id,
+                                    token: createToken(),
+                                }
+                            })
+                            res.status(200).json({user, message: 'user is logged in', passMatch, token});
+                            // res.status(200).json({user, message: 'user is logged in', passMatch: true});
                         } else {
-                            res.status(404).json({message: 'Wrong password'});
+                            res.status(404).json({message: 'Wrong password', errorFor: 'password'});
+                            // res.json({message: 'Wrong password'});
                         }
                     } catch (error) {
                         console.log(error);
