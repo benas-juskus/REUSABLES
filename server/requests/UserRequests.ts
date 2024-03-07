@@ -1,4 +1,4 @@
-import { query, body, validationResult } from 'express-validator'
+import { body } from 'express-validator'
 
 module.exports = {
     createUser: [
@@ -24,9 +24,8 @@ module.exports = {
             .escape()
             .custom((value, { req }) => {
                 return value === req.body.password;
-            }).withMessage("Nesutampa slaptažodžiai"),
-            
-        ],
+            }).withMessage("Passwords don't match"),
+    ],
     updateUser: [
         body('username')
             .optional()

@@ -12,7 +12,6 @@ const prisma = new PrismaClient();
 const User = {
 
     create: async (userdata: User) => {
-        // console.log("userdata", userdata);
         const user = await prisma.users.create({
             data: {
                 username: userdata.username,
@@ -55,12 +54,13 @@ const User = {
             }
         })
     },
-    // updatePassword: async (user_id: Number, userdata: User) => {
-    //     const uppdatePassword = await prisma.users.update({
-    //         const 
-    //     })
-    // }
-    
+    delete: async (user_id: Number) => {
+        const deletedUser = await prisma.users.delete({
+            where: {
+                id: Number(user_id)
+            }
+        })
+    }
 }
 
 module.exports = User 
