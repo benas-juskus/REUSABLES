@@ -112,15 +112,15 @@ const Login = () => {
   });
 
   const handleFormSubmit = async (values) => {
-    console.log("Form Values:", values);
+    // console.log("Form Values:", values);
     try {
         const response = await Axios.post("/login", {email: values.email, password: values.password});
         console.log("Response: ", response.data);
         // setErrMsgMail("");
         // setErrMsgPass("");
     } catch (error) {
-        console.log(error);
-        console.log(error.response.data.message);
+        // console.log(error);
+        // console.log(error.response.data.message);
 
         if (error.response.data.validation) {
             let messages = [];

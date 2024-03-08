@@ -108,4 +108,5 @@ model Tokens {
   User    Users  @relation(fields: [user_id], references: [id])
   user_id Int    @db.UnsignedInt
   token   String @unique
+  device  String
 }

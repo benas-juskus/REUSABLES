@@ -46,10 +46,13 @@ const AuthControler = {
                     try {
                         const passMatch = await bcryptjs.compare(data.password, user.password);
                         if ( passMatch ){
+                            console.log(req.headers['user-agent']);
+                            const deviseData = req.headers['user-agent'];
                             const token = await prisma.tokens.create({
                                 data: {
-                                    user_id: user.id,
+                                    user_id:  user.id,
                                     token: createToken(),
+                                    device: String(deviseData)
                                 }
                             })
                             res.status(200).json({user, message: 'user is logged in', passMatch, token});
@@ -69,7 +72,9 @@ const AuthControler = {
                 
             }
         }
-
+    },
+    logout: async (req: Request, res: Response) => {
+        
     }
 }
 
