@@ -54,6 +54,13 @@ const UserPanel = styled(Box) ({
     justifyContent: 'space-evenly'
 });
 
+const UserPanelInfo = styled(Box) ({
+    display: 'flex',
+    flexDirection: 'column',
+    aligItems: 'center',
+    justifyContent: 'center'
+})
+
 const Avatar = styled(Box) ({
     alignSelf: "center",
     height: "4em",
@@ -66,7 +73,7 @@ const UserPanelBtns = styled(Box) ({
     flexDirection: 'column'
 });
 
-const Header = () => {
+const Header = ({username = 'Username'}) => {
     
     return (
         <Wrapper>
@@ -92,7 +99,11 @@ const Header = () => {
             </Nav>
 
             <UserPanel>
-                <Avatar component="img" src="./assets/logos/Logo-main-no-bg.png" alt="avatar"/>
+                <UserPanelInfo>
+                    <Avatar component="img" src="./assets/logos/Logo-main-no-bg.png" alt="avatar"/>
+                    <p>{username}</p>
+                </UserPanelInfo>
+
                 <UserPanelBtns>
                     <Button variant="contained" size="small" style={{backgroundColor: headerTheme.palette.primary.dark}}>Login</Button>
                     <Button variant="contained" size="small" style={{backgroundColor: headerTheme.palette.primary.dark}}>Register</Button>
