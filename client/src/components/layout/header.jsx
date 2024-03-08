@@ -1,7 +1,7 @@
 import { useState } from "react";
 import {Formik} from 'formik'
 import { createTheme, Button, Box} from "@mui/material";
-import TextField from '@mui/material/TextField';
+import OutlinedInput from '@mui/material/OutlinedInput';
 import styled from "@emotion/styled";
 import { Link } from 'react-router-dom'
 
@@ -22,54 +22,83 @@ const headerTheme = createTheme({
     }
   });
 
-const Logo = styled(Box) ({
-    height: "5em",
-    width: "5em"
-})
-
-const Nav = styled(Box) ({
+const Wrapper = styled(Box) ({
     display: 'flex',
+    justifyContent: 'space-between',
     backgroundColor: headerTheme.palette.primary.main,
+    padding: '1.5em 0.5em 1.5em 3em'
 });
 
-const Search = styled(TextField) ({
+const Logo = styled(Box) ({
+    alignSelf: "center",
+    height: "7em",
+    width: "7em"
+});
 
+const Nav = styled(Box) ({
+    maxWidth: "80%",
+    display: 'flex',
+    flexWrap: 'wrap',
+    justifyContent: 'space-evenly'
+});
+
+const Search = styled(OutlinedInput) ({
+    width: "75%",
+    height: "3em",
 });
 
 const UserPanel = styled(Box) ({
-    display: 'flex'
-})
+    width: "25%",
+    maxWidth: "55%",
+    display: 'flex',
+    justifyContent: 'space-evenly'
+});
+
 const Avatar = styled(Box) ({
-    height: "3em",
-    width: "3em"
-})
+    alignSelf: "center",
+    height: "4em",
+    width: "4em"
+});
+
 const UserPanelBtns = styled(Box) ({
     display: 'flex',
+    justifyContent: 'space-evenly',
     flexDirection: 'column'
-})
-const Wrapper = styled(Box) ({
-    display: 'flex',
-    backgroundColor: headerTheme.palette.primary.main,
-    padding: '20px'
-})
+});
 
 const Header = () => {
     
     return (
         <Wrapper>
+        
             <Logo component="img" src="./assets/logos/Logo-main-no-bg.png" alt="logo"/>
+
             <Nav>
-                <Button variant="contained">+ List new item</Button>
-                <Search></Search>
-                <Button variant="contained">View Categories</Button>
+                <Search placeholder="Search items">Search listings</Search>
+                <Button variant="contained" style={{
+                        height: "3em",
+                        marginTop: "0.8em",
+                        color: headerTheme.palette.primary.dark,
+                        backgroundColor: headerTheme.palette.secondary.light
+                        }}>+ List new item
+                </Button>
+                
+                <Button variant="contained" style={{
+                        height: "3em",
+                        marginTop: "0.8em",
+                        backgroundColor: headerTheme.palette.primary.dark
+                        }}>View Categories
+                </Button>
             </Nav>
+
             <UserPanel>
                 <Avatar component="img" src="./assets/logos/Logo-main-no-bg.png" alt="avatar"/>
                 <UserPanelBtns>
-                    <Button variant="contained">Login</Button>
-                    <Button variant="contained">Register</Button>
+                    <Button variant="contained" size="small" style={{backgroundColor: headerTheme.palette.primary.dark}}>Login</Button>
+                    <Button variant="contained" size="small" style={{backgroundColor: headerTheme.palette.primary.dark}}>Register</Button>
                 </UserPanelBtns>
             </UserPanel>
+
         </Wrapper>
     )
 }
