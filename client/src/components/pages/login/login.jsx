@@ -116,6 +116,7 @@ const Login = () => {
     try {
         const response = await Axios.post("/login", {email: values.email, password: values.password});
         console.log("Response: ", response.data);
+        localStorage.setItem("token", response.data.token);
         // setErrMsgMail("");
         // setErrMsgPass("");
     } catch (error) {

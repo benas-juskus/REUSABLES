@@ -2,15 +2,33 @@ const express = require('express');
 import { validationResult } from 'express-validator'
 import { Request, Response } from 'express';
 import { PrismaClient } from '@prisma/client';
+import { randomBytes } from 'crypto';
 const UserModel = require('../models/UserModel.ts')
 const bcryptjs = require('bcryptjs');
 const UserControler = require('./UserControler.ts')
+const crypto = require('crypto')
 // const { dataValidation } = require('../controlers/UserControler.ts');
 
 const prisma = new PrismaClient();
 
-const createToken = () => require('crypto').randomBytes(64).toString('hex')
+// const createToken = () => require('crypto').randomBytes(64).toString('hex')
+const createToken = (expiresIn: number) => {
 
+    const expirationTimestamp = Math.floor(Date.now() / 1000) + expiresIn;
+
+    const payload = {
+        exp: expirationTimestamp
+    };
+    const serializedPayload = JSON.stringify(payload);
+    const key = crypto.randomBytes(32);
+    const iv = crypto.randomBytes(16);
+    const cypher = crypto.createCipheriv( 'aes-256-cbc', key, iv);
+    // const cypher = crypto.createCipher( 'aes-256-cbc', process.env.JWT_SECRET);
+    let encryptedPayload = cypher.update(serializedPayload, 'utf8', 'hex');
+    encryptedPayload += cypher.final('hex');
+
+    return encryptedPayload
+}
 
 interface Auth {
     email?: string;
@@ -52,15 +70,13 @@ const AuthControler = {
                             const token = await prisma.tokens.create({
                                 data: {
                                     user_id:  user.id,
-                                    token: createToken(),
+                                    token: createToken(3600),
                                     device: String(deviseData)
                                 }
                             })
                             res.status(200).json({user, message: 'user is logged in', passMatch, token});
-                            // res.status(200).json({user, message: 'user is logged in', passMatch: true});
                         } else {
                             res.status(404).json({message: 'Wrong password', errorFor: 'password'});
-                            // res.json({message: 'Wrong password'});
                         }
                     } catch (error) {
                         console.log(error);
