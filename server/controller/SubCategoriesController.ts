@@ -64,7 +64,8 @@ module.exports = {
     }
   },
   createSubCategory: async function (req: Request, res: Response) {
-    const { category_id, title, nr } = req.body;
+
+    const {category_id: category_id, text: title, nr = 5 } = req.body;
     try {
       const subCategory = await prisma.subCategories.create({
         data: {
@@ -79,6 +80,7 @@ module.exports = {
         res.status(500).json({ msg: error.message });
       }
     }
+    console.log("received", title, nr, category_id);
   },
   updateSubCategory: async function (req: Request, res: Response) {
     const { category_id, title, nr } = req.body;

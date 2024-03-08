@@ -47,7 +47,7 @@ module.exports = {
     }
   },
   createCategory: async function (req: Request, res: Response) {
-    const { title, nr } = req.body;
+    const { text: title, nr = 3 } = req.body;
     try {
       const category = await prisma.categories.create({
         data: {
@@ -55,6 +55,7 @@ module.exports = {
           nr: nr,
         },
       });
+
       res.status(201).json({ status: "created succesfully", data: {category}});
     } catch (error) {
       if (hasMessage(error)) {
