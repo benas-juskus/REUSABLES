@@ -4,6 +4,7 @@ import { Request, Response } from 'express';
 import { PrismaClient } from '@prisma/client';
 const UserModel = require('../models/UserModel.ts')
 const bcryptjs = require('bcryptjs');
+const UserControler = require('./UserControler.ts')
 // const { dataValidation } = require('../controlers/UserControler.ts');
 
 const prisma = new PrismaClient();
@@ -69,13 +70,43 @@ const AuthControler = {
             } catch (error) {
                 console.log(error);
                 res.status(500).json({message: error});
-                
             }
         }
     },
     logout: async (req: Request, res: Response) => {
+        const user_id = parseInt(req.params.id); 
+        const deviseData = req.headers['user-agent'];
+        try {
+            await prisma.tokens.deleteMany({
+                where: {
+                    AND: [
+                        { user_id: user_id },
+                        { device: deviseData }
+                    ]
+                }
+            })
+            res.status(200).json({message: 'User was logged out!'});
+        } catch (error) {
+            console.log(error);
+            res.status(500).json({message: error});
+        }
+    },
+    logoutAllDevices: async (req: Request, res: Response) => {
+        const user_id = parseInt(req.params.id);
         
-    }
+        try {
+            await prisma.tokens.deleteMany({
+                where: {
+                        user_id: user_id 
+                }
+            })
+            res.status(200).json({message: 'User was logged out from all devices!'});
+        } catch (error) {
+            console.log(error);
+            res.status(500).json({message: error});
+        }
+    },
+    register: UserControler.createUser
 }
 
 module.exports = AuthControler
