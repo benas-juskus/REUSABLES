@@ -39,22 +39,41 @@ const Logo = styled(Box) ({
 });
 
 const Nav = styled(Box) ({
-    maxWidth: "80%",
+    width: "80%",
+    maxWidth: "35em",
     display: 'flex',
     flexWrap: 'wrap',
     justifyContent: 'space-evenly'
 });
 
 const SearchInput = styled(OutlinedInput) ({
-    width: "75%",
+    width: "100%",
     height: "3em",
 });
 
+const SearchForm = () => {
+    return(
+        <Formik>
+            <form action="/search" method="POST" style={{width: "75%"}}>
+                <SearchInput placeholder="Search..." name="search_for"/>
+            </form>
+        </Formik>
+    )
+}
+
 const UserPanel = styled(Box) ({
-    width: "25%",
-    maxWidth: "55%",
+    width: "35%",
+    maxWidth: "20em",
     display: 'flex',
     justifyContent: 'space-evenly'
+});
+
+const Avatar = styled(Box) ({
+    borderRadius: "50%",
+    alignSelf: "center",
+    height: "4em",
+    width: "4em",
+    objectFit: "cover"
 });
 
 const UserPanelInfo = styled(Box) ({
@@ -63,14 +82,6 @@ const UserPanelInfo = styled(Box) ({
     textAlign: 'center',
     aligItems: 'center',
     justifyContent: 'center'
-})
-
-const Avatar = styled(Box) ({
-    borderRadius: "50%",
-    alignSelf: "center",
-    height: "4em",
-    width: "4em",
-    objectFit: "cover"
 });
 
 const UserPanelBtns = styled(Box) ({
@@ -81,7 +92,11 @@ const UserPanelBtns = styled(Box) ({
 
 const LogInButton = () => {
     return (
-        <Button href="/login" variant="contained" size="small" style={{backgroundColor: colorTheme.palette.primary.dark}}>
+        <Button 
+            href="/login" 
+            variant="contained" 
+            size="small" 
+            style={{backgroundColor: colorTheme.palette.primary.dark}}>
             Log In
         </Button>
     )
@@ -89,23 +104,40 @@ const LogInButton = () => {
 
 const LogOutButton = ({user_id}) => {
     return (
-        <Button href={`/logout/${user_id}`} variant="contained" size="small" style={{backgroundColor: colorTheme.palette.primary.dark}}>Log out</Button>
+        <Button 
+            href={`/logout/${user_id}`} 
+            variant="contained" size="small" 
+            style={{backgroundColor: colorTheme.palette.primary.dark}}>
+            Log out
+        </Button>
     )
 };
 
 const RegisterButton = () => {
     return (
-        <Button href="/register" variant="contained" size="small" style={{backgroundColor: colorTheme.palette.primary.dark}}>Register</Button>
+        <Button 
+            href="/register" 
+            variant="contained" 
+            size="small" 
+            style={{backgroundColor: colorTheme.palette.primary.dark}}>
+            Register
+        </Button>
     )
 };
 
 const MyItemsButton = () => {
     return (
-        <Button href="/myitems" variant="contained" size="small" style={{backgroundColor: colorTheme.palette.primary.dark}}>My Items</Button>
+        <Button 
+            href="/myitems" 
+            variant="contained" 
+            size="small" 
+            style={{backgroundColor: colorTheme.palette.primary.dark}}>
+            My Items
+        </Button>
     )
 };
 
-const Categories = styled(Box) ({
+const CategoriesList = styled(Box) ({
     textAlign: "center",
     padding: "1em 0",
     marginTop: "0",
@@ -118,14 +150,12 @@ const Categories = styled(Box) ({
 
 const CategoriesPanel = ({data, visibility}) => {
     return(
-        <Categories component="ul" style={{display: visibility ? "flex" : "none"}}>
+        <CategoriesList component="ul" style={{display: visibility ? "flex" : "none"}}>
             {data.map(data => <li style={{margin: "0.4em 3em", minWidth: "25%"}} key={data.id}><a style={{textDecoration: "none", color: "black"}} href={data.link}>{data.cat}</a></li>)}
-        </Categories>
+        </CategoriesList>
         
     )
 };
-
-
 
 const Header = ({data = user_data ? user_data : null}) => {
 
@@ -138,10 +168,12 @@ const Header = ({data = user_data ? user_data : null}) => {
         <>
         <Wrapper>
         
-            <Logo component="img" src="./assets/logos/Logo-main-no-bg.png" alt="logo"/>
+            <Link to="/">
+                <Logo component="img" src="./assets/logos/Logo-main-no-bg.png" alt="logo"/>
+            </Link>
 
             <Nav>
-                <SearchInput placeholder="Search items">Search listings</SearchInput>
+                <SearchForm/>
                 <Button variant="contained"
                         href="/items/create"
                         style={{

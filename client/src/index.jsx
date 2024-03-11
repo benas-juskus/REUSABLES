@@ -2,8 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './app/app'
 import Login from './components/pages/login/login'
-import Header from './components/layout/header'
-import Footer from './components/layout/footer'
+import Dashboard from  './components/pages/dashboard/dashboard';
 import {
   createBrowserRouter,
   createRoutesFromElements,
@@ -14,9 +13,9 @@ import {
 const router = createBrowserRouter(
   createRoutesFromElements(
         <>
+          <Route path="/" element={<Login />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/header" element={<Header />} />
-          <Route path="/footer" element={<Footer />} />
+          <Route path="/dashboard" element={<Dashboard />} />
         </>
   )
 );

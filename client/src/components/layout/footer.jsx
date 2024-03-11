@@ -16,7 +16,7 @@ const Wrapper = styled(Box) ({
 const Footer = () => {
     return (
         <Wrapper>
-            <span>KTMC || Copyright © 2024. All rights reserved</span>
+            <span>KTMC || REUSABLES © 2024. All rights reserved</span>
         </Wrapper>
     )
 }
