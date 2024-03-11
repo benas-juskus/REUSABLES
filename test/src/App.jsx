@@ -6,6 +6,7 @@ function App() {
   const [inputText, setInputText] = useState('');
   const [subcategoriesText, setSubcategoriesText] = useState({});
   const [subcategoryTexts, setSubcategoryTexts] = useState({});
+  const [categoryTexts, setcategoryTexts] = useState({})
 
   useEffect(() => {
     fetch("/test/")
@@ -29,13 +30,19 @@ function App() {
       [categoryId]: newText
     }));
   };
-  
-const handleInputChanges2 = (categoryId, value) => {
-  setSubcategoryTexts(prevState => ({
-    ...prevState,
-    [categoryId]: value
-  }));
-};
+
+  const handleInputChanges2 = (categoryId, value) => {
+    setSubcategoryTexts(prevState => ({
+      ...prevState,
+      [categoryId]: value
+    }));
+  };
+  const handleInputChanges3 = (categoryId, value) => {
+    setcategoryTexts(prevState => ({
+      ...prevState,
+      [categoryId]: value
+    }));
+  };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -73,15 +80,13 @@ const handleInputChanges2 = (categoryId, value) => {
         throw new Error('Failed to submit data');
       }
       setReloadData(prev => !prev);
-      // Optionally, handle successful submission (e.g., show a success message)
     } catch (error) {
       console.error('Error:', error);
-      // Optionally, handle errors (e.g., show an error message)
     }
-    
+
     setSubcategoriesText(prevState => ({
       ...prevState,
-      [categoryId]: '' // Clear input after submission
+      [categoryId]: ''
     }));
     console.log("categoryText", categoryText, "categoryId", categoryId, "sent to:", `/categories/${categoryId}/subcategories`);
   };
@@ -98,10 +103,8 @@ const handleInputChanges2 = (categoryId, value) => {
         throw new Error('Failed to submit data');
       }
       setReloadData(prev => !prev);
-      // Optionally, handle successful submission (e.g., show a success message)
     } catch (error) {
       console.error('Error:', error);
-      // Optionally, handle errors (e.g., show an error message)
     }
 
     console.log("categoryId", categoryId, "sent to:", `/categories/`);
@@ -118,10 +121,8 @@ const handleInputChanges2 = (categoryId, value) => {
         throw new Error('Failed to submit data');
       }
       setReloadData(prev => !prev);
-      // Optionally, handle successful submission (e.g., show a success message)
     } catch (error) {
       console.error('Error:', error);
-      // Optionally, handle errors (e.g., show an error message)
     }
 
     console.log("subcategoryId", subcategoryId, "sent to:", `/categories/${subcategoryId}/subcategories//${subcategoryId}`);
@@ -129,57 +130,87 @@ const handleInputChanges2 = (categoryId, value) => {
   const handleSubmit5 = async (event, subcategoryText, subcategoryId) => {
     event.preventDefault();
     try {
-        const response = await fetch(`/categories/${subcategoryId}/subcategories/${subcategoryId}`, {
-            method: 'PATCH',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ text: subcategoryText, category_id: subcategoryId })
-        });
-        if (!response.ok) {
-            throw new Error('Failed to submit data');
-        }
-        setReloadData(prev => !prev);
-        // Optionally, handle successful submission (e.g., show a success message)
+      const response = await fetch(`/categories/${subcategoryId}/subcategories/${subcategoryId}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ text: subcategoryText, category_id: subcategoryId })
+      });
+      if (!response.ok) {
+        throw new Error('Failed to submit data');
+      }
+      setReloadData(prev => !prev);
     } catch (error) {
-        console.error('Error:', error);
-        // Optionally, handle errors (e.g., show an error message)
+      console.error('Error:', error);
     }
 
-    // Clear input after submission for the respective input field
     setSubcategoryTexts(prevState => ({
-        ...prevState,
-        [subcategoryId]: ''
+      ...prevState,
+      [subcategoryId]: ''
     }));
     console.log("subcategoryText", subcategoryText, "subcategoryId", subcategoryId, "sent to:", `/categories/${subcategoryId}/subcategories/${subcategoryId}`);
-};
+  };
+  const handleSubmit6 = async (event, categoryText, categoryId) => {
+    event.preventDefault();
+    try {
+      const response = await fetch(`/categories/${categoryId}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ text: categoryText, category_id: categoryId })
+      });
+      if (!response.ok) {
+        throw new Error('Failed to submit data');
+      }
+      setReloadData(prev => !prev);
+    } catch (error) {
+      console.error('Error:', error);
+    }
+
+    setcategoryTexts(prevState => ({
+      ...prevState,
+      [categoryId]: ''
+    }));
+    console.log("categoryText", categoryText, "categoryId", categoryId, "sent to:", `/categories/${categoryId}`);
+  };
+
 
   return (
     <div>
       {categories.map(category => (
         <div key={category.id}>
-          <h2>{category.title} 
+          <h2>{category.title}</h2>
 
           <button onClick={() => handleSubmit3(category.id)}>Delete</button>
-          
-          </h2>
-        
+
+          <form onSubmit={(event) => handleSubmit6(event, categoryTexts[category.id], category.id)}>
+            <input
+              placeholder={`rename category ${category.title}`}
+              type="text"
+              value={categoryTexts[category.id]}
+              onChange={(event) => handleInputChanges3(category.id, event.target.value)}
+            />
+            <button type='submit'>Submit</button>
+          </form>
           <ul>
-        {category.SubCategories.map(subcategory => (
-          <li key={subcategory.id}><form onSubmit={(event) => handleSubmit5(event, subcategoryTexts[subcategory.id], subcategory.id)}>
-          <input
-            placeholder={`rename subcategory ${subcategory.title}`}
-            type="text"
-            value={subcategoryTexts[subcategory.id] || subcategory.title}
-            onChange={(event) => handleInputChanges2(subcategory.id, event.target.value)}
-          />
-          <button type='submit'>Submit</button>
-        </form> <button onClick={() => handleSubmit4(subcategory.id)}>Delete</button>
-          
-          </li>
-          
-        ))}
-      </ul>
+            {category.SubCategories.map(subcategory => (
+              <li key={subcategory.id}>
+                <p>{subcategory.title}</p>
+                <form onSubmit={(event) => handleSubmit5(event, subcategoryTexts[subcategory.id], subcategory.id)}>
+                  <input
+                    placeholder={`rename subcategory ${subcategory.title}`}
+                    type="text"
+                    value={subcategoryTexts[subcategory.id]}
+                    onChange={(event) => handleInputChanges2(subcategory.id, event.target.value)}
+                  />
+                  <button type='submit'>Submit</button>
+                </form> <button onClick={() => handleSubmit4(subcategory.id)}>Delete</button>
+              </li>
+
+            ))}
+          </ul>
           <form onSubmit={(event) => handleSubmit2(event, subcategoriesText[category.id], category.id)}>
             <input
               placeholder={`add subcategory for ${category.title}`}
@@ -189,6 +220,7 @@ const handleInputChanges2 = (categoryId, value) => {
             />
             <button type='submit'>Submit</button>
           </form>
+          <hr />
         </div>
       ))}
       <div>

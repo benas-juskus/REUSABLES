@@ -64,7 +64,8 @@ module.exports = {
     }
   },
   updateCategory: async function (req: Request, res: Response) {
-    const { title, nr } = req.body;
+    console.log("received", req.body);
+    const { text: title, nr } = req.body;
     try {
       const category = await prisma.categories.update({
         where: {
