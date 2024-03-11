@@ -10,7 +10,10 @@ router.post("/", SubCategoriesController.createSubCategory, (req, res, next) => 
     next(); // Call next middleware or send response
   });
   
-router.patch("/:id", SubCategoriesController.updateSubCategory);
+router.patch("/:id", SubCategoriesController.updateSubCategory, (req, res, next) => {
+  console.log("received");
+  next(); // Call next middleware or send response
+});
 router.delete("/:id", SubCategoriesController.deleteSubCategory);
 
 module.exports = router;

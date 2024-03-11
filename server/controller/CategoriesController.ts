@@ -84,6 +84,11 @@ module.exports = {
   },
   deleteCategory: async function (req: Request, res: Response) {
     try {
+      const subcategory = await prisma.subCategories.deleteMany({
+        where: {
+          category_id: Number(req.params.id),
+        },
+      });
       const category = await prisma.categories.delete({
         where: {
           id: Number(req.params.id),

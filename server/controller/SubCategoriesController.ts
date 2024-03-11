@@ -1,5 +1,6 @@
 import express, { Request, Response } from "express";
 import { PrismaClient } from "@prisma/client";
+import { text } from "body-parser";
 const prisma = new PrismaClient();
 
 function hasMessage(x: unknown): x is { message: string } {
@@ -83,16 +84,16 @@ module.exports = {
     console.log("received", title, nr, category_id);
   },
   updateSubCategory: async function (req: Request, res: Response) {
-    const { category_id, title, nr } = req.body;
+    
+    const {category_id: category_id, text: title} = req.body;
+    console.log("received", category_id, title);
     try {
-      const subCategory = await prisma.subCategories.update({
+      const subCategory = await prisma.subCategories.updateMany({
         where: {
           id: Number(req.params.id),
         },
         data: {
-          category_id: category_id,
           title: title,
-          nr: nr
         },
       });
       res.status(200).json({ status: "updated succesfully", data: {subCategory}});
