@@ -1,32 +1,14 @@
 import { useState } from "react";
 import {Formik} from 'formik'
 import * as Yup from 'yup'
-import { createTheme, Button, Box} from "@mui/material";
+import {Button, Box} from "@mui/material";
 import TextField from '@mui/material/TextField';
 import EmailIcon from '@mui/icons-material/Email';
 import KeyIcon from '@mui/icons-material/Key';
 import styled from "@emotion/styled";
 import Axios  from 'axios';
-import { Link } from 'react-router-dom'
-
-
-// styled elements and color theme
-const formTheme = createTheme({
-    palette: {
-      primary: {
-        light: "#757ce8",
-        main: "#9DBC98",
-        dark: "#638889",
-        contrastText: "#fff"
-      },
-      secondary: {
-        light: "#fcf6e8",
-        main: "#F9EFDB",
-        dark: "#EBD9B4",
-        contrastText: "#000"
-      }
-    }
-  });
+import { Link } from 'react-router-dom';
+import colorTheme from "../../layout/colorTheme";
 
 const InputField = styled(TextField)({
     '& input:-webkit-autofill': {
@@ -34,10 +16,10 @@ const InputField = styled(TextField)({
         backgroundColor: 'transparent',
     },
     '& label.Mui-focused': {
-        color: formTheme.palette.primary.dark,
+        color: colorTheme.palette.primary.dark,
     },
     '& .MuiInputBase-input': {
-        color: formTheme.palette.primary.dark,
+        color: colorTheme.palette.primary.dark,
     },
     width: '80%'
 });
@@ -61,7 +43,7 @@ const FormWrapper = styled(Box) ({
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
-    backgroundColor: formTheme.palette.secondary.light,
+    backgroundColor: colorTheme.palette.secondary.light,
     borderRadius: 7,
     padding: '0 30px 30px 30px',
     display: 'flex',
@@ -81,10 +63,10 @@ const FormWrapper = styled(Box) ({
     },
 })
 const StyledButton = styled(Button)({
-    backgroundColor: formTheme.palette.primary.main,
+    backgroundColor: colorTheme.palette.primary.main,
     color: 'white',
     '&:hover': {
-        backgroundColor: formTheme.palette.primary.dark,
+        backgroundColor: colorTheme.palette.primary.dark,
     },
     borderRadius: 20,
     alignSelf: 'flex-start'

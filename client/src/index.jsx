@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom/client'
 import App from './app/app'
 import Login from './components/pages/login/login'
 import Header from './components/layout/header'
+import Footer from './components/layout/footer'
 import {
   createBrowserRouter,
   createRoutesFromElements,
@@ -15,6 +16,7 @@ const router = createBrowserRouter(
         <>
           <Route path="/" element={<Login />} />
           <Route path="/header" element={<Header />} />
+          <Route path="/footer" element={<Footer />} />
         </>
   )
 );

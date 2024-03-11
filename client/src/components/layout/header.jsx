@@ -3,29 +3,14 @@ import {Formik} from 'formik'
 import { createTheme, Button, Box} from "@mui/material";
 import OutlinedInput from '@mui/material/OutlinedInput';
 import styled from "@emotion/styled";
+import colorTheme from "./colorTheme";
 import { Link } from 'react-router-dom'
 
-const headerTheme = createTheme({
-    palette: {
-      primary: {
-        light: "#757ce8",
-        main: "#9DBC98",
-        dark: "#638889",
-        contrastText: "#fff"
-      },
-      secondary: {
-        light: "#fcf6e8",
-        main: "#F9EFDB",
-        dark: "#EBD9B4",
-        contrastText: "#000"
-      }
-    }
-  });
 
 const Wrapper = styled(Box) ({
     display: 'flex',
     justifyContent: 'space-between',
-    backgroundColor: headerTheme.palette.primary.main,
+    backgroundColor: colorTheme.palette.primary.main,
     padding: '1.5em 0.5em 1.5em 3em'
 });
 
@@ -85,15 +70,15 @@ const Header = ({username = 'Username'}) => {
                 <Button variant="contained" style={{
                         height: "3em",
                         marginTop: "0.8em",
-                        color: headerTheme.palette.primary.dark,
-                        backgroundColor: headerTheme.palette.secondary.light
+                        color: colorTheme.palette.primary.dark,
+                        backgroundColor: colorTheme.palette.secondary.light
                         }}>+ List new item
                 </Button>
                 
                 <Button variant="contained" style={{
                         height: "3em",
                         marginTop: "0.8em",
-                        backgroundColor: headerTheme.palette.primary.dark
+                        backgroundColor: colorTheme.palette.primary.dark
                         }}>View Categories
                 </Button>
             </Nav>
@@ -105,8 +90,8 @@ const Header = ({username = 'Username'}) => {
                 </UserPanelInfo>
 
                 <UserPanelBtns>
-                    <Button variant="contained" size="small" style={{backgroundColor: headerTheme.palette.primary.dark}}>Login</Button>
-                    <Button variant="contained" size="small" style={{backgroundColor: headerTheme.palette.primary.dark}}>Register</Button>
+                    <Button variant="contained" size="small" style={{backgroundColor: colorTheme.palette.primary.dark}}>Login</Button>
+                    <Button variant="contained" size="small" style={{backgroundColor: colorTheme.palette.primary.dark}}>Register</Button>
                 </UserPanelBtns>
             </UserPanel>
 
