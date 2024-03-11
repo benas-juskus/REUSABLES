@@ -1,7 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 
 import FakeUser from './seeders/fakeUser';
-import roles from './seeders/roles';
+import Roles from './seeders/roles';
 // import FakeItem from './fakeItem';
 // import FakeCategory from './fakeCategory';
 // import FakeSubCategory from './fakeSubCategory';
@@ -9,8 +9,8 @@ import roles from './seeders/roles';
 const prisma = new PrismaClient();
 
 async function main() {
-  prisma.role.createMany({
-    data: roles
+  prisma.roles.createMany({
+    data: Roles
   })
   .then(create_roles => {
     if (create_roles) {
