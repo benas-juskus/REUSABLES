@@ -76,8 +76,8 @@ const StyledButton = styled(Button)({
 
 const Login = () => {
 
-    const [errMsgPass, setErrMsgPass] = useState("");
     const [errMsgMail, setErrMsgMail] = useState("");
+    const [errMsgPass, setErrMsgPass] = useState("");
 
     // initial login credentials
     const initialValues = {
@@ -94,19 +94,37 @@ const Login = () => {
   });
 
   const handleFormSubmit = async (values) => {
-    console.log("Form Values:", values);
+    // console.log("Form Values:", values);
     try {
-        const response = await Axios.post("/test", {email: values.email, password: values.password});
-        if (response.data.user) {
-            setErrMsgMail("");
-            if (response.data.errMsgPass) {
-                setErrMsgPass(response.data.errMsgPass);
-            } else setErrMsgPass("");
-        } else {
-            setErrMsgMail(response.data.errMsgMail);
-        }     
+        const response = await Axios.post("/login", {email: values.email, password: values.password});
+        console.log("Response: ", response.data);
+        localStorage.setItem("token", response.data.token);
+        // setErrMsgMail("");
+        // setErrMsgPass("");
     } catch (error) {
-        console.log(error);
+        // console.log(error);
+        // console.log(error.response.data.message);
+
+        if (error.response.data.validation) {
+            let messages = [];
+            let errArray = error.response.data.validation.errors;
+            for (let err of errArray) {
+                if (err.path === "email") {
+                    messages.push(err.msg);
+                    setErrMsgMail(messages.join(','));
+                    setErrMsgPass("");
+                } else {
+                    messages.push(err.msg);
+                    setErrMsgPass(messages.join(','));
+                }
+            }
+        }
+
+        if (error.response.data.errorFor === "email") {
+            setErrMsgMail(error.response.data.message);
+        } else {
+            setErrMsgPass(error.response.data.message);
+        }
     }
   }
 
@@ -131,7 +149,7 @@ const Login = () => {
                                     type="email"
                                     value={values.email} 
                                     helperText={touched.email && (errors.email || errMsgMail)}
-                                    error={Boolean((errors.email || errMsgMail) && touched.email)}
+                                    error={Boolean((errors.email || errMsgMail !== "") && touched.email)}
                                     onChange={handleChange}
                                     onBlur={handleBlur}
                                 />
@@ -146,7 +164,7 @@ const Login = () => {
                                     type="password" 
                                     value={values.password} 
                                     helperText={touched.password && (errors.password || errMsgPass)}
-                                    error={Boolean((errors.password || errMsgPass) && touched.password)}
+                                    error={Boolean((errors.password || errMsgPass !== "") && touched.password)}
                                     onChange={handleChange}
                                     onBlur={handleBlur}
                                 />
