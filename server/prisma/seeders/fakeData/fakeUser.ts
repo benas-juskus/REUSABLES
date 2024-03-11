@@ -1,12 +1,14 @@
 import { faker } from '@faker-js/faker';
 import * as bcrypt from "bcryptjs";
 
+
 interface Users {
+    role_id: number;
     username: string;
     email: string;
     password: string;
     createdAt: Date;
-    role_id: number;
+    
 }
 
 const FakeUser = {

@@ -26,7 +26,7 @@ model Users {
 }
 
 model Roles {
-  id    Int     @id @default(autoincrement()) @db.UnsignedTinyInt
+  id    Int     @id @db.UnsignedTinyInt
   title String
   Users Users[]
 }
