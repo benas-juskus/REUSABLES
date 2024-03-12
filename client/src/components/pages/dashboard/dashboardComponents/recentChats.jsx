@@ -16,6 +16,7 @@ const SingleChatPreview = ({transaction}) => {
             component={Link} to={`/transaction/${transaction.id}`}>
             <ItemImagePreview photo={"https://placehold.co/400x400"}/>
             <Box sx={{
+                    paddingLeft: "0.5em",
                     margin: "0 0",
                     color: "black", 
                     width: "100%", 
