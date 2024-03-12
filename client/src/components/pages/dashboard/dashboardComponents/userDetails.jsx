@@ -1,14 +1,14 @@
 import Rating from '@mui/material/Rating';
-import { Button} from "@mui/material";
+import { Box, Button} from "@mui/material";
 import colorTheme from '../../../layout/colorTheme';
 
 const RatingDisplay = ({value}) => {
     return (
-        <div style={{display: "flex", flexDirection: "column", alignItems: "center", marginTop: "3em"}}>
+        <Box style={{display: "flex", flexDirection: "column", alignItems: "center", marginTop: "3em"}}>
             <span>Your current rating is</span>
             <h1 style={{margin: "0"}}>{value}</h1>  
             <Rating name="user_rating" value={value} readOnly precision={0.1} size="large"/>
-        </div>
+        </Box>
     )
 }
 
