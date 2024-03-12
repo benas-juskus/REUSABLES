@@ -5,8 +5,10 @@ function App() {
   const [reloadData, setReloadData] = useState(false);
   const [inputText, setInputText] = useState('');
   const [subcategoriesText, setSubcategoriesText] = useState({});
+  const [subcategoriesNr, setsubcategoriesNr] = useState({});
   const [subcategoryTexts, setSubcategoryTexts] = useState({});
   const [categoryTexts, setcategoryTexts] = useState({})
+  const [nr, setnr] = useState({})
 
   useEffect(() => {
     fetch("/test/")
@@ -21,6 +23,17 @@ function App() {
 
   const handleInputChange = (event) => {
     setInputText(event.target.value);
+  };
+
+  const handleNumberChange = (event) => {
+    setnr(event.target.value);
+  }
+  const handleNumberChange2 = (categoryId, event) => {
+    const newnr = event.target.value;
+    setsubcategoriesNr(prevState => ({
+      ...prevState,
+      [categoryId]: newnr
+    }));
   };
 
   const handleInputChanges = (categoryId, event) => {
@@ -52,7 +65,7 @@ function App() {
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ text: inputText })
+        body: JSON.stringify({ text: inputText, nr: nr})
       });
       if (!response.ok) {
         throw new Error('Failed to submit data');
@@ -62,11 +75,12 @@ function App() {
     } catch (error) {
       console.error('Error:', error);
     }
-    console.log("inputText", inputText);
+    console.log("inputText", inputText, "nr", nr);
     setInputText('');
+    setnr('');
   };
 
-  const handleSubmit2 = async (event, categoryText, categoryId) => {
+  const handleSubmit2 = async (event, subcategoryText, categoryId, categoryNumber) => {
     event.preventDefault();
     try {
       const response = await fetch(`/categories/${categoryId}/subcategories/`, {
@@ -74,22 +88,29 @@ function App() {
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ text: categoryText, category_id: categoryId })
+        body: JSON.stringify({ text: subcategoryText, category_id: categoryId, Nr: categoryNumber })
       });
       if (!response.ok) {
         throw new Error('Failed to submit data');
       }
       setReloadData(prev => !prev);
+  
+      // Reset the subcategory number input field to an empty string using the category number as the key
+      setsubcategoriesNr(prevState => ({
+        ...prevState,
+        [categoryNumber]: ''
+      }));
     } catch (error) {
       console.error('Error:', error);
     }
-
+  
+    // Reset the subcategory text input field to an empty string
     setSubcategoriesText(prevState => ({
       ...prevState,
       [categoryId]: ''
     }));
-    console.log("categoryText", categoryText, "categoryId", categoryId, "sent to:", `/categories/${categoryId}/subcategories`);
   };
+  
 
   const handleSubmit3 = async (categoryId) => {
     try {
@@ -127,7 +148,7 @@ function App() {
 
     console.log("subcategoryId", subcategoryId, "sent to:", `/categories/${subcategoryId}/subcategories//${subcategoryId}`);
   };
-  const handleSubmit5 = async (event, subcategoryText, subcategoryId) => {
+  const handleSubmit5 = async (event, subcategoryText, subcategoryId, subcategoriesNr) => {
     event.preventDefault();
     try {
       const response = await fetch(`/categories/${subcategoryId}/subcategories/${subcategoryId}`, {
@@ -135,12 +156,16 @@ function App() {
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ text: subcategoryText, category_id: subcategoryId })
+        body: JSON.stringify({ text: subcategoryText, category_id: subcategoryId, Nr: subcategoriesNr})
       });
       if (!response.ok) {
         throw new Error('Failed to submit data');
       }
       setReloadData(prev => !prev);
+      setsubcategoriesNr(prevState => ({
+        ...prevState,
+        [subcategoryId]: ''
+      }));
     } catch (error) {
       console.error('Error:', error);
     }
@@ -149,9 +174,13 @@ function App() {
       ...prevState,
       [subcategoryId]: ''
     }));
-    console.log("subcategoryText", subcategoryText, "subcategoryId", subcategoryId, "sent to:", `/categories/${subcategoryId}/subcategories/${subcategoryId}`);
+    console.log(subcategoriesNr, "subcategoryText", subcategoryText, "subcategoryId", subcategoryId, "sent to:", `/categories/${subcategoryId}/subcategories/${subcategoryId}`);
   };
-  const handleSubmit6 = async (event, categoryText, categoryId) => {
+
+
+
+
+  const handleSubmit6 = async (event, categoryText, categoryId, categoryNr) => {
     event.preventDefault();
     try {
       const response = await fetch(`/categories/${categoryId}`, {
@@ -159,66 +188,105 @@ function App() {
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ text: categoryText, category_id: categoryId })
+        body: JSON.stringify({ text: categoryText, category_id: categoryId, Nr: categoryNr })
       });
       if (!response.ok) {
         throw new Error('Failed to submit data');
       }
       setReloadData(prev => !prev);
+      
+      // Reset the subcategoriesNr state for the specific category ID
+      setsubcategoriesNr(prevState => ({
+        ...prevState,
+        [categoryId]: ''
+      }));
+      
     } catch (error) {
       console.error('Error:', error);
     }
-
+    
+    // Reset the categoryTexts state for the specific category ID
     setcategoryTexts(prevState => ({
       ...prevState,
       [categoryId]: ''
     }));
+    
     console.log("categoryText", categoryText, "categoryId", categoryId, "sent to:", `/categories/${categoryId}`);
   };
+  
 
 
   return (
     <div>
       {categories.map(category => (
         <div key={category.id}>
-          <h2>{category.title}</h2>
+          <h2>{category.title} {category.nr}</h2>
 
           <button onClick={() => handleSubmit3(category.id)}>Delete</button>
 
-          <form onSubmit={(event) => handleSubmit6(event, categoryTexts[category.id], category.id)}>
+          <form onSubmit={(event) => handleSubmit6(event, categoryTexts[category.id], category.id, subcategoriesNr[category.id] )}>
+            {/* SubcategoriesNr ne subkategorija, o kintamasis kategorijos numeriui pakeisti. Naudoju subcatogiresNr kintamaji kad nereiketu kartot kodo */}
             <input
-              placeholder={`rename category ${category.title}`}
+              placeholder={`Rename category ${category.title}`}
               type="text"
               value={categoryTexts[category.id]}
               onChange={(event) => handleInputChanges3(category.id, event.target.value)}
             />
-            <button type='submit'>Submit</button>
+<input 
+  placeholder='Change category number' 
+  onChange={(event) => handleNumberChange2(category.id, event)} 
+  value={subcategoriesNr[category.id]} // Use category ID to retrieve the value
+  type="number" 
+  name="" 
+  id="" 
+  pattern='[0-9]*' 
+  inputMode='numeric'
+/>            <button type='submit'>Submit</button>
           </form>
           <ul>
             {category.SubCategories.map(subcategory => (
               <li key={subcategory.id}>
-                <p>{subcategory.title}</p>
-                <form onSubmit={(event) => handleSubmit5(event, subcategoryTexts[subcategory.id], subcategory.id)}>
+                <p>{subcategory.title} {subcategory.nr}</p>
+                <form onSubmit={(event) => handleSubmit5(event, subcategoryTexts[subcategory.id], subcategory.id, subcategoriesNr[subcategory.id])}>
                   <input
-                    placeholder={`rename subcategory ${subcategory.title}`}
+                    placeholder={`Rename subcategory ${subcategory.title}`}
                     type="text"
                     value={subcategoryTexts[subcategory.id]}
                     onChange={(event) => handleInputChanges2(subcategory.id, event.target.value)}
                   />
+<input 
+  placeholder='Change subcategory number' 
+  onChange={(event) => handleNumberChange2(subcategory.id, event)} 
+  value={subcategoriesNr[subcategory.id]} // Use subcategory ID as the key to access the value
+  type="number" 
+  name="" 
+  id="" 
+  pattern='[0-9]*' 
+  inputMode='numeric'
+/>
                   <button type='submit'>Submit</button>
                 </form> <button onClick={() => handleSubmit4(subcategory.id)}>Delete</button>
               </li>
 
             ))}
           </ul>
-          <form onSubmit={(event) => handleSubmit2(event, subcategoriesText[category.id], category.id)}>
+          <form onSubmit={(event) => handleSubmit2(event, subcategoriesText[category.id], category.id, subcategoriesNr[category.nr])}>
             <input
-              placeholder={`add subcategory for ${category.title}`}
+              placeholder={`Add subcategory for ${category.title}`}
               type="text"
               value={subcategoriesText[category.id] || ''}
               onChange={(event) => handleInputChanges(category.id, event)}
             />
-            <button type='submit'>Submit</button>
+<input 
+  placeholder='Subcategory number' 
+  onChange={(event) => handleNumberChange2(category.nr, event)} 
+  value={subcategoriesNr[category.nr]} // Use subcategory ID as the key to access the value
+  type="number" 
+  name="" 
+  id="" 
+  pattern='[0-9]*' 
+  inputMode='numeric'
+/>          <button type='submit'>Submit</button>
           </form>
           <hr />
         </div>
@@ -226,11 +294,12 @@ function App() {
       <div>
         <form onSubmit={handleSubmit}>
           <input
-            placeholder='add category'
+            placeholder='Add category'
             type="text"
             value={inputText}
             onChange={handleInputChange}
           />
+            <input required placeholder='Category number' type="number" onChange={handleNumberChange} value={nr} name="" id="" pattern='[0-9]*' inputMode='numeric'/>
           <button type='submit'>Submit</button>
         </form>
       </div>

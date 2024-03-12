@@ -47,12 +47,13 @@ module.exports = {
     }
   },
   createCategory: async function (req: Request, res: Response) {
-    const { text: title, nr = 3 } = req.body;
+    console.log("received", req.body);
+    const { text: title, nr: number } = req.body;
     try {
       const category = await prisma.categories.create({
         data: {
           title: title,
-          nr: nr,
+          nr: Number(number),
         },
       });
 
@@ -65,19 +66,45 @@ module.exports = {
   },
   updateCategory: async function (req: Request, res: Response) {
     console.log("received", req.body);
-    const { text: title, nr } = req.body;
+    const { text: title, Nr: Nr, category_id: category_id } = req.body;
     try {
-      const category = await prisma.categories.update({
-        where: {
-          id: Number(req.params.id),
-        },
-        data: {
-          title: title,
-          nr: nr,
-        },
-      });
+      if (title == undefined || title == ''){
+        const category = await prisma.categories.updateMany({
+          where: {
+            id: category_id,
+          },
+          data: {
+            nr: Number(Nr),
+          },
+        });
+        res.status(200).json({ status: "updated succesfully", data: {category}});
+        console.log("Changed number")
+  }
+  else if (Nr == undefined || Nr == '' || Nr == isNaN(Nr) || !Nr) {
+    const category = await prisma.categories.updateMany({
+      where: {
+        id: category_id,
+      },
+      data: {
+        title: title,
+      },
+    });
+    res.status(200).json({ status: "updated succesfully", data: {category}});
+    console.log("Changed title", category_id, title, Nr)
+  } else {
+    const category = await prisma.categories.updateMany({
+      where: {
+        id: category_id,
+      },
+      data: {
+        title: title,
+        nr: Number(Nr),
+      },
+    });
       res.status(200).json({ status: "updated succesfully", data: {category}});
-    } catch (error) {
+    }
+    console.log("Changed", category_id, Nr, title)
+  } catch (error) {
       if (hasMessage(error)) {
         res.status(500).json({ msg: error.message });
       }
