@@ -114,7 +114,7 @@ app.use("/categories/", CategoriesRouter)
 const SubCategoriesRouter = require("./routes/SubCategoriesRoute")
 app.use("/categories/:idi/subcategories", SubCategoriesRouter)
 
-  
+//React kodas --> /test/src/App.jsx
 
 app.get("/test", async (req, res) => {
     try {
