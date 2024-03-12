@@ -53,8 +53,8 @@ const SearchInput = styled(OutlinedInput) ({
 
 const SearchForm = () => {
     return(
-        <Formik>
-            <form action="/search" method="POST" style={{width: "75%"}}>
+        <Formik style={{width: "100%"}}>
+            <form action="/search" method="POST" style={{width: "100%"}}>
                 <SearchInput placeholder="Search..." name="search_for"/>
             </form>
         </Formik>
@@ -174,24 +174,26 @@ const Header = ({data = user_data ? user_data : null}) => {
 
             <Nav>
                 <SearchForm/>
-                <Button variant="contained"
-                        href="/items/create"
-                        style={{
-                            height: "3em",
-                            marginTop: "0.8em",
-                            color: colorTheme.palette.primary.dark,
-                            backgroundColor: colorTheme.palette.secondary.light
-                        }}>+ List new item
-                </Button>
-                
-                <Button variant="contained" 
-                        onClick={toggleCategoriesVisibility}
-                        style={{
-                            height: "3em",
-                            marginTop: "0.8em",
-                            backgroundColor: colorTheme.palette.primary.dark
-                        }}>View Categories
-                </Button>
+                <Box sx={{width: "100%", display: "flex", justifyContent: "space-evenly"}}>
+                    <Button variant="contained"
+                            href="/items/create"
+                            style={{
+                                height: "3em",
+                                marginTop: "0.8em",
+                                color: colorTheme.palette.primary.dark,
+                                backgroundColor: colorTheme.palette.secondary.light
+                            }}>+ List new item
+                    </Button>
+                    
+                    <Button variant="contained" 
+                            onClick={toggleCategoriesVisibility}
+                            style={{
+                                height: "3em",
+                                marginTop: "0.8em",
+                                backgroundColor: colorTheme.palette.primary.dark
+                            }}>View Categories
+                    </Button>
+                </Box>
             </Nav>
 
             <UserPanel>

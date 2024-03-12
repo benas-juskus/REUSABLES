@@ -62,17 +62,20 @@ const ChangePasswordBtn = () => {
 
 const UserDetails = ({user_data}) => {
     return (
-        <div style={{
+        <Box sx={{
                 display: "flex", 
                 flexDirection: "column", 
-                alignItems: "center", 
-                marginTop: "3em"}}> 
+                alignItems: "center",
+                width: "30%",
+                minHeight: "100%",
+                boxShadow: 1,
+                backgroundColor: colorTheme.palette.secondary.light}}> 
             <RatingDisplay value={user_data.rating}/>
             <ProfilePicture image={user_data.photo}></ProfilePicture>
             <h2>{user_data.username}</h2>
             <UsernameControlBtn username={user_data.username}></UsernameControlBtn>
             <ChangePasswordBtn></ChangePasswordBtn>
-        </div>
+        </Box>
     )
 };
 

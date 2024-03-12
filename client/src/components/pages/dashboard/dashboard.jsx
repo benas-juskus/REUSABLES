@@ -1,8 +1,9 @@
 import Heeader from '../../../components/layout/header';
 import Footer from '../../../components/layout/footer';
-import {Container, Box} from "@mui/material";
+import {Container, Box, Button} from "@mui/material";
 import colorTheme from '../../layout/colorTheme';
 import UserDetails from './dashboardComponents/userDetails';
+import RecentItemsList from './dashboardComponents/recentItems';
 
 const user_data = {
     id: 3,
@@ -17,30 +18,11 @@ const user_data = {
     ]
 };
 
-const SingleItemQuickView = ({item}) => {
-    return (
-        <Box style={{display: "flex"}}>
-            <img src={item.photo} alt="item_image" style={{width: "5em", height: "5em", borderRadius: "10px", objectFit: "cover"}}></img>
-            <h3 style={{marginLeft: "0.5em"}}>{item.name}</h3>
-        </Box>
-    )
-}
-
-const RecentItemsList = ({user_items}) => {
-    return (
-        <Box style={{boxShadow: "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)"}}>
-            {user_items.map((item) => (
-                <SingleItemQuickView item={item}/>
-            ))}
-        </Box>
-    )
-};
-
 const RecentChats = () => {
     return (
-        <>
-
-        </>
+        <Box sx={{boxShadow: 1, backgroundColor: colorTheme.palette.secondary.light, minHeight: "100%", width: "30%"}}>
+        Messenger component will go here
+        </Box>
     )
 }
 
@@ -48,12 +30,10 @@ const Dashboard = () => {
     return (
         <>
             <Heeader data={user_data}/>
-                <Container style={{display: "flex", backgroundColor: colorTheme.palette.secondary.light}}>
+                <Container sx={{paddingTop: "5em",height: "50em", display: "flex", justifyContent: "space-evenly", alignItems: "center"}}>
                     <UserDetails user_data={user_data}/>
-                    <Box>
-                        <RecentItemsList user_items={user_data.items}></RecentItemsList>
-                        <RecentChats></RecentChats>
-                    </Box>
+                    <RecentItemsList user_items={user_data.items}></RecentItemsList>
+                    <RecentChats></RecentChats>
                 </Container>
             <Footer />
         </>
