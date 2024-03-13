@@ -29,9 +29,9 @@ const SubCategoriesRouter = require("./routes/SubCategoriesRoute");
 app.use("/categories/:idi/subcategories", SubCategoriesRouter);
 const ItemsRouter = require("./routes/ItemsRoute");
 app.use("/items", ItemsRouter);
-const UserRouter = require('./routers/UserRouter');
+const UserRouter = require('./routes/UserRouter');
 app.use("/users", UserRouter);
-const AuthRouter = require('./routers/AuthRouter');
+const AuthRouter = require('./routes/AuthRouter');
 app.use("/", AuthRouter);
 
 app.listen(process.env.REACT_APP_SERVER_PORT, () => {

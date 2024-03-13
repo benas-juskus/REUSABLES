@@ -1,4 +1,4 @@
-const UserController = require('../controlers/UserControler.ts');
+const UserController = require('../controllers/UserControler.ts');
 const express = require('express');
 const  router  = express.Router();
 const userValidations = require('../requests/UserRequests.ts');
