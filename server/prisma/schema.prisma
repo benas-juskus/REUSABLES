@@ -20,6 +20,7 @@ model Users {
   Location       Locations[]
   Notifications  Notifications[]
   Tokens         Tokens[]
+  Image          Gallery[]
 
   @@unique([username, email])
   @@unique([username, password])
@@ -55,7 +56,8 @@ model Items {
   subCategories_id Int              @db.UnsignedMediumInt
   name             String
   description      String
-  photo            String
+  photo            Gallery          @relation(fields: [photo_id], references: [id])
+  photo_id         Int              @db.UnsignedInt
   price            Decimal          @db.Decimal(10, 2)
   for_sale         Boolean
   exchange         Boolean
@@ -108,4 +110,12 @@ model Tokens {
   User    Users  @relation(fields: [user_id], references: [id])
   user_id Int    @db.UnsignedInt
   token   String @unique
+}
+
+model Gallery {
+  id      Int     @id @default(autoincrement()) @db.UnsignedInt
+  user    Users   @relation(fields: [user_id], references: [id])
+  user_id Int     @db.UnsignedInt
+  photo   String
+  Items   Items[]
 }

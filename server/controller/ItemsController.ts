@@ -73,41 +73,36 @@ module.exports = {
       visibility,
     } = req.body;
     try {
+      const ext: { [key: string]: string } = {
+        "image/webp": ".webp",
+        "image/png": ".png",
+        "image/jpeg": ".jpg",
+      };
+      let file_name =
+        req.file?.filename.slice(0, 6) +
+        "_" +
+        Number(user_id) +
+        ext[req.file?.mimetype as keyof typeof ext];
+      await fs.rename(req.file?.path, "public/images/" + file_name);
+      const photo = await prisma.gallery.create({
+        data: {
+          user_id: Number(user_id),
+          photo: file_name,
+        },
+      });
       const item = await prisma.items.create({
         data: {
           users_id: Number(user_id),
           subCategories_id: Number(subcategories_id),
           name: String(name),
+          photo_id: Number(photo.id),
           description: String(description),
-          photo: "",
           price: Number(price),
           for_sale: Boolean(for_sale),
           exchange: Boolean(exchange),
           visibility: Boolean(visibility),
         },
       });
-      if (req.file) {
-        const ext = {
-          "image/webp": ".webp",
-          "image/png": ".png",
-          "image/jpeg": ".jpg",
-        };
-        let file_name =
-          req.file.filename.slice(0, 6) +
-          "_" +
-          Number(user_id) +
-          //@ts-ignore
-          ext[req.file.mimetype];
-        await fs.rename(req.file.path, "public/images/" + file_name);
-        await prisma.items.update({
-          where: {
-            id: Number(item.id),
-          },
-          data: {
-            photo: file_name,
-          },
-        });
-      }
       res.status(201).json({ status: "created succesfully", data: { item } });
     } catch (error) {
       if (hasMessage(error)) {
@@ -116,17 +111,13 @@ module.exports = {
     }
   },
   updateItem: async function (req: Request, res: Response) {
-    const oldPhoto = await prisma.items.findFirst({
-      where: { id: Number(req.params.id) },
-      select: { photo: true },
-    });
     const {
       item_id,
       user_id,
       subcategories_id,
       name,
       description,
-      photo,
+      photo_id,
       price,
       for_sale,
       exchange,
@@ -143,40 +134,11 @@ module.exports = {
           subCategories_id: Number(subcategories_id),
           name: String(name),
           description: String(description),
-          photo: String(photo),
           price: Number(price),
           for_sale: Boolean(for_sale),
           exchange: Boolean(exchange),
           visibility: Boolean(visibility),
         },
-      });
-      if (req.file) {
-        const ext = {
-          "image/webp": ".webp",
-          "image/png": ".png",
-          "image/jpeg": ".jpg",
-        };
-        let file_name =
-          req.file.filename.slice(0, 6) +
-          "_" +
-          Number(user_id) +
-          //@ts-ignore
-          ext[req.file.mimetype];
-        await fs.rename(req.file.path, "public/images/" + file_name);
-        await prisma.items.update({
-          where: {
-            id: Number(item_id),
-          },
-          data: {
-            photo: file_name,
-          },
-        });
-      }
-      fs.unlink("public/images/" + oldPhoto?.photo, (err: any) => {
-        if (err) console.log(err);
-        else {
-          console.log("\nDeleted file:" + oldPhoto?.photo);
-        }
       });
       res.status(200).json({ status: "updated succesfully", data: { item } });
     } catch (error) {

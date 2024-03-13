@@ -3,12 +3,9 @@ import cors from "cors";
 import * as mysql from "mysql";
 import bodyParser from "body-parser";
 import dotenv from "dotenv";
-import multer from "multer";
-import methodOverride from "method-override";
 import path from "path";
 
 dotenv.config();
-
 const app = express();
 
 const pool = mysql.createPool({
@@ -21,14 +18,6 @@ const pool = mysql.createPool({
 app.use(express.json());
 app.use(cors());
 app.use(bodyParser.json());
-app.use(multer({ dest: "uploads/" }).single("photo"));
-app.use(methodOverride((req) => {
-    console.log(req.headers["content-type"]);
-    console.log(req.body);
-    console.log(req.files);
-    return req.body._method;
-  })
-);
 app.use(express.static(path.join(__dirname, "public")));
 app.get("/", (req: Request, res: Response) => {
   res.send("Hello World!");
