@@ -33,6 +33,7 @@ const ProfilePicture = ({image}) => {
                         style={{
                             opacity: isHovered ? 0.8 : 1,
                             cursor: isHovered ? "pointer" : "auto",
+                            maxWidth: "100%",
                             width: "20em", 
                             height: "20em", 
                             borderRadius: "50%",
