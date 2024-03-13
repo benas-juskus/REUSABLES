@@ -1,13 +1,17 @@
 const cors = require('cors');
 const express = require('express');
 const mysql = require('mysql');
-const bodyParser = require('body-parser');
+const bodyParser = require('body-parser')
 
 const { PrismaClient } = require("@prisma/client");
 
 const prisma = new PrismaClient();
 
+const UserRouter = require('./routers/UserRouter');
+
 const app = express();
+
+
 
 const pool = mysql.createPool({
   host: process.env.MYSQL_HOST_IP,
@@ -18,6 +22,8 @@ const pool = mysql.createPool({
 
 app.use(cors());
 app.use(bodyParser.json());
+
+app.use("/", UserRouter);
 
 app.listen(process.env.REACT_APP_SERVER_PORT, () => {
   console.log(`App server now listening on port ${process.env.REACT_APP_SERVER_PORT}`);
