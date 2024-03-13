@@ -24,13 +24,9 @@ module.exports = {
   },
   getAllSubCategories: async function (req: Request, res: Response) {
     try {
-      const response = await prisma.subCategories.findMany({
-        include: {
-          Category: {
-            select: { title: true },
-          },
-        },
-      });
+      const response = await prisma.subCategories.findMany(
+        {include:{Category:true}}
+      );
       res.status(200).json(response);
     } catch (error) {
       if (hasMessage(error)) {
@@ -43,19 +39,9 @@ module.exports = {
       const response = await prisma.subCategories.findUnique({
         where: {
           id: Number(req.params.id),
-          category_id: Number(req.params.idi),
-        },
-        include: {
-          Category: {
-            select: { title: true },
-          },
         },
       });
-      if (response == null) {
-        res.status(200).json({ status: response, msg: "No Subcategory Found" });
-      } else {
-        res.status(200).json(response);
-      }
+      res.status(200).json(response);
     } catch (error) {
       if (hasMessage(error)) {
         res.status(500).json({ msg: error.message });
@@ -69,6 +55,7 @@ module.exports = {
           category_id: Number(req.params.id),
         },
       });
+      console.log(req.params)
       res.status(200).json(response);
     } catch (error) {
       if (hasMessage(error)) {
@@ -77,18 +64,17 @@ module.exports = {
     }
   },
   createSubCategory: async function (req: Request, res: Response) {
-    const { category_id, title, nr } = req.body;
+    console.log("received", req.body);
+    const {category_id: category_id, text: title, Nr: Nr} = req.body;
     try {
       const subCategory = await prisma.subCategories.create({
         data: {
           category_id: category_id,
           title: title,
-          nr: nr,
+          nr: Number(Nr),
         },
       });
-      res
-        .status(201)
-        .json({ status: "created succesfully", data: { subCategory } });
+      res.status(201).json({ status: "created succesfully", data: {subCategory}});
     } catch (error) {
       if (hasMessage(error)) {
         res.status(500).json({ msg: error.message });
@@ -96,21 +82,44 @@ module.exports = {
     }
   },
   updateSubCategory: async function (req: Request, res: Response) {
-    const { category_id, title, nr } = req.body;
+    
+    const {category_id: category_id, text: title, Nr: Nr} = req.body;
+    console.log("received", category_id, title,);
     try {
-      const subCategory = await prisma.subCategories.update({
+   if (title == undefined || title == ''){
+      const subCategory = await prisma.subCategories.updateMany({
         where: {
           id: Number(req.params.id),
         },
         data: {
-          category_id: category_id,
-          title: title,
-          nr: nr,
+          nr: Number(Nr)
         },
       });
-      res
-        .status(200)
-        .json({ status: "updated succesfully", data: { subCategory } });
+      console.log("Changed number")
+}
+else if (Nr == undefined || Nr == '' || Nr == "NaN"){
+  const subCategory = await prisma.subCategories.updateMany({
+    where: {
+      id: Number(req.params.id),
+    },
+    data: {
+      title: title,
+    },
+  });
+  console.log("Changed title")
+} else {
+  const subCategory = await prisma.subCategories.updateMany({
+    where: {
+      id: Number(req.params.id),
+    },
+    data: {
+      title: title,
+      nr: Number(Nr),
+    },
+  });
+  console.log("Changed both", title, Nr)
+}
+      res.status(200).json({ status: "updated succesfully"});
     } catch (error) {
       if (hasMessage(error)) {
         res.status(500).json({ msg: error.message });
@@ -124,26 +133,7 @@ module.exports = {
           id: Number(req.params.id),
         },
       });
-      res
-        .status(200)
-        .json({ status: "deleted succesfully", data: { subCategory } });
-    } catch (error) {
-      if (hasMessage(error)) {
-        res.status(500).json({ msg: error.message });
-      }
-    }
-  },
-  deleteSelectedSubCategories: async function (req: Request, res: Response) {
-    const { ids } = req.body;
-    try {
-      const subCategories = await prisma.subCategories.deleteMany({
-        where: {
-          id: { in: ids },
-        },
-      });
-      res
-        .status(200)
-        .json({ status: "deleted succesfully", data: { subCategories } });
+      res.status(200).json({ status: "deleted succesfully", data: {subCategory}});
     } catch (error) {
       if (hasMessage(error)) {
         res.status(500).json({ msg: error.message });

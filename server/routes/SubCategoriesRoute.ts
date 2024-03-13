@@ -4,7 +4,7 @@ const router = express.Router();
 
 router.get("/first", SubCategoriesController.getSubCategory);
 router.post("/", SubCategoriesController.createSubCategory);
-router.delete("/delmany", SubCategoriesController.deleteSelectedSubCategories);
+// router.delete("/delmany", SubCategoriesController.deleteSelectedSubCategories);
 router.patch("/:id", SubCategoriesController.updateSubCategory);
 router.delete("/:id", SubCategoriesController.deleteSubCategory);
 
