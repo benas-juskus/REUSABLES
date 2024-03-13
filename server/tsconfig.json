@@ -8,8 +8,9 @@
       // "rootDir": "./",
       "noEmit": true,
       "esModuleInterop": true,
-      "types": ["node"],
+      "types": ["node","express"],
       "module": "CommonJS",
+      "lib": ["es2015.promise", "es2015", "dom"],
     },
     // "include": ["server/index.ts"]
   }
