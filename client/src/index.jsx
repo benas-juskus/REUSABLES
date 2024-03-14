@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom/client'
 import App from './app/app'
 import Login from './components/pages/login/login'
 import Dashboard from  './components/pages/dashboard/dashboard';
+import Search_test from './components/pages/test/search_test';
 import {
   createBrowserRouter,
   createRoutesFromElements,
@@ -16,6 +17,7 @@ const router = createBrowserRouter(
           <Route path="/" element={<Login />} />
           <Route path="/login" element={<Login />} />
           <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/searchtest" element={<Search_test/>} />
         </>
   )
 );

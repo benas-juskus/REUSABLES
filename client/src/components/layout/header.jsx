@@ -51,11 +51,15 @@ const SearchInput = styled(OutlinedInput) ({
     height: "3em",
 });
 
-const SearchForm = () => {
+const SearchForm = ({setQuery}) => {
     return(
         <Formik style={{width: "100%"}}>
             <form action="/search" method="POST" style={{width: "100%"}}>
-                <SearchInput placeholder="Search..." name="search_for"/>
+                <SearchInput 
+                    placeholder="Search..." 
+                    name="search_for"
+                    onChange={e => setQuery(e.target.value)}
+                    />
             </form>
         </Formik>
     )
@@ -157,9 +161,11 @@ const CategoriesPanel = ({data, visibility}) => {
     )
 };
 
-const Header = ({data = user_data ? user_data : null}) => {
+const Header = ({data = user_data ? user_data : null,setQuery}) => {
 
     const [isVisible, setIsVisible] = useState(false);
+    // const [query, setQuery] = useState("");
+    // console.log(query);
     const toggleCategoriesVisibility = () => {
         setIsVisible(!isVisible);
     };
@@ -173,7 +179,7 @@ const Header = ({data = user_data ? user_data : null}) => {
             </Link>
 
             <Nav>
-                <SearchForm/>
+                <SearchForm setQuery={setQuery}/>
                 <Box sx={{width: "100%", display: "flex", justifyContent: "space-evenly"}}>
                     <Button variant="contained"
                             href="/items/create"

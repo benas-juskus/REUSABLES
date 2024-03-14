@@ -43,6 +43,23 @@ module.exports = {
       }
     }
   },
+  seachItems: async function (req: Request, res: Response) {
+    const {query} = req.query;
+    try {
+      const keys = ["username", "email"];
+      const search = (data: any) => {
+        return data.filter((item: any) => 
+            keys.some(key => item[key].toLowerCase().includes(query)));
+      };
+      const Items = await prisma.items.findMany();
+      res.status(200).json(search(Items));
+      // res.status(200).json(search(Items).slice(0, 10));  //<===== use this line instead to limit the number of items returned
+    } catch (error) {
+      if (hasMessage(error)) {
+        res.status(500).json({ msg: error.message });
+      }
+    }
+  },
   getItemById: async function (req: Request, res: Response) {
     try {
       const response = await prisma.items.findUnique({
