@@ -43,13 +43,15 @@ module.exports = {
       }
     }
   },
-  seachItems: async function (req: Request, res: Response) {
-    const {query} = req.query;
+  searchItems: async function (req: Request, res: Response) {
+    const { q } = req.query;
+    console.log(q);
+    
     try {
-      const keys = ["username", "email"];
+      const keys = ["name", "description"];
       const search = (data: any) => {
         return data.filter((item: any) => 
-            keys.some(key => item[key].toLowerCase().includes(query)));
+            keys.some(key => item[key].toLowerCase().includes(q)));
       };
       const Items = await prisma.items.findMany();
       res.status(200).json(search(Items));

@@ -26,8 +26,8 @@ const Card = (props) => {
 
     return (
         <Wrapper>
-            <Username >{props.username}</Username>
-            <Email>{props.email}</Email>
+            <Username >{props.name}</Username>
+            <Email>{props.description}</Email>
         </Wrapper>
     )
 }

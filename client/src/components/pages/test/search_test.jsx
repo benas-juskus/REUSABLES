@@ -1,41 +1,30 @@
 import Heeader from '../../layout/header';
 import Footer from '../../layout/footer';
-import {Container, Box} from "@mui/material";
+import {Container} from "@mui/material";
 import {useEffect, useState} from "react";
 import axios from 'axios';
 import Card from './info_card';
 
 
 const Search = () => {
-    const keys = ["username", "email"];
 
-    const search = (data) => {
-        return data.filter(item => 
-            keys.some(key => item[key].toLowerCase().includes(query)));
-    };
+    const [data, setData] = useState([]);
+    // const [query, setQuery] = useState("");
 
-    useEffect(async () => {
-   
-        const Users = await axios.post("/users/showall");
-        console.log(Users.data);
-        setUsers(Users.data);
+//     useEffect(() => {
+//         const getAllItems = async () => {
+//             const Items = await axios.get(`/items/search?q=${query}`);
+//             console.log(Items.data);
+//             setData(Items.data);
+//         };
+//         getAllItems();
 
-}, [])
+// }, [query])
 
-    const [query, setQuery] = useState("");
-    const [users, setUsers] = useState([]);
-    console.log(query);
-    // console.log(data.filter((user) => user.username.toLowerCase().includes("ot")));
     return (
         <>
-            <Heeader setQuery={setQuery}/>
-                {/* <Container sx={{
-                        paddingTop: "5em",
-                        height: "50em", 
-                        display: "flex", 
-                        justifyContent: "space-evenly", 
-                        alignItems: "center"}}>
-                </Container> */}
+            <Heeader setData={setData}/>
+            {/* <Heeader setQuery={setQuery}/> */}
             <Container
                 sx={{
                     paddingTop: "1em", 
@@ -47,8 +36,8 @@ const Search = () => {
                     width: "400px",
                 }}
             >
-                {search(users).map((user) => (
-                    <Card key={user._id} username={user.username} email={user.email}/>
+                {data.map((item, index) => (
+                    <Card key={index} name={item.name} description={item.description}/>
                 ))}
                 
             </Container>
