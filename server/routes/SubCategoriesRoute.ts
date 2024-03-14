@@ -1,5 +1,5 @@
 import express from "express";
-const SubCategoriesController = require("../controller/SubCategoriesController");
+const SubCategoriesController = require("../controllers/SubCategoriesController");
 const router = express.Router();
 
 router.get("/first", SubCategoriesController.getSubCategory);

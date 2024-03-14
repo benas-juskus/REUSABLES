@@ -1,8 +1,8 @@
 import express from "express";
 import multer from "multer";
 const upload = multer({ dest: 'uploads/' });
-const ItemsController = require("../controller/ItemsController");
-const GalleryController = require("../controller/GalleryController");
+const ItemsController = require("../controllers/ItemsController");
+const GalleryController = require("../controllers/GalleryController");
 const router = express.Router();
 
 router.get("/first", ItemsController.getItem);
