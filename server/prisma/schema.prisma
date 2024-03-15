@@ -120,3 +120,7 @@ model Gallery {
   photo   String
   Items   Items[]
 }
+
+model Censorship {
+  string String @id
+}
