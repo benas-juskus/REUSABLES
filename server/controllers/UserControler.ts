@@ -54,21 +54,16 @@ const UserControler = {
     let censorUserName = false;
 
     try {
-        const censor = await prisma.censorship.findMany();
-        console.log(censor);
-
-        for (let word of censor) {
-          console.log("word", word.string);
-          console.log("data.username", data.username);
-          console.log(data.username === word.string);
-          if (data.username === word.string) {
-            censorUserName = true;
-          } 
-        }
-      } catch (error) {
-        console.log(error);
+      const censor = await prisma.censorship.findMany();
+      for (let word of censor) {
+        if (data.username.includes(word.string)) {
+          censorUserName = true;
+          break;
+        } 
       }
-
+    } catch (error) {
+      console.log(error);
+    }
 
     const validation = dataValidation(req);
 
