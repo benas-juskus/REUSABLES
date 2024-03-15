@@ -46,15 +46,28 @@ module.exports = {
   searchItems: async function (req: Request, res: Response) {
     const { q } = req.query;
     console.log(q);
+    const searchResult = [];
     
     try {
       const keys = ["name", "description"];
-      const search = (data: any) => {
+      const searchByName = (data: any) => {
         return data.filter((item: any) => 
-            keys.some(key => item[key].toLowerCase().includes(q)));
+           item.name.toLowerCase().includes(q));
+      };
+      const searchByDescription = (data: any) => {
+        return data.filter((item: any) => 
+           item.description.toLowerCase().includes(q));
       };
       const Items = await prisma.items.findMany();
-      res.status(200).json(search(Items));
+      const resultByName = searchByName(Items);
+      const resultByDescription = searchByDescription(Items);
+      searchResult.push(...resultByName);
+      for (let item of resultByDescription) {
+        if (!searchResult.includes(item)) {
+          searchResult.push(item);
+        }
+      }
+      res.status(200).json(searchResult);
       // res.status(200).json(search(Items).slice(0, 10));  //<===== use this line instead to limit the number of items returned
     } catch (error) {
       if (hasMessage(error)) {
@@ -62,6 +75,28 @@ module.exports = {
       }
     }
   },
+
+  //================ kapt for future  refarence =================
+  // searchItems: async function (req: Request, res: Response) {
+  //   const { q } = req.query;
+  //   console.log(q);
+    
+  //   try {
+  //     const keys = ["name", "description"];
+  //     const search = (data: any) => {
+  //       return data.filter((item: any) => 
+  //           keys.some(key => item[key].toLowerCase().includes(q)));
+  //     };
+  //     const Items = await prisma.items.findMany();
+  //     res.status(200).json(search(Items));
+  //     // res.status(200).json(search(Items).slice(0, 10));  //<===== use this line instead to limit the number of items returned
+  //   } catch (error) {
+  //     if (hasMessage(error)) {
+  //       res.status(500).json({ msg: error.message });
+  //     }
+  //   }
+  // },
+  //==============================================================
   getItemById: async function (req: Request, res: Response) {
     try {
       const response = await prisma.items.findUnique({
