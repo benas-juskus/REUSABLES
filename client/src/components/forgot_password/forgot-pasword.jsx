@@ -4,11 +4,9 @@ import * as Yup from "yup";
 import { createTheme, Button, Box } from "@mui/material";
 import TextField from "@mui/material/TextField";
 import EmailIcon from "@mui/icons-material/Email";
-import KeyIcon from "@mui/icons-material/Key";
 import styled from "@emotion/styled";
 import Axios from "axios";
 import { Link } from "react-router-dom";
-import PersonIcon from '@mui/icons-material/Person';
 
 // Styled elements and color theme
 const formTheme = createTheme({
@@ -86,30 +84,27 @@ const StyledButton = styled(Button)({
   alignSelf: "flex-start",
 });
 
-const Registration = () => {
-  const [errMsgPass, setErrMsgPass] = useState("");
-  const [errMsgMail, setErrMsgMail] = useState("");
+const ForgotPassword = () => {
+  const [errMsgEmail, setErrMsgEmail] = useState("");
 
-  // Initial registration credentials
+  // Initial form values
   const initialValues = {
-    username: "",
     email: "",
-    password: "",
-    repeatPassword: "",
   };
 
-  // Form field validation schema
+  // Form validation schema
   const validationSchema = Yup.object().shape({
-    username: Yup.string().required("Username is required!"),
     email: Yup.string().email("Invalid Email address").required("Email is required!"),
-    password: Yup.string().min(6, "Password must be at least 6 characters").required("Password is required!"),
-    repeatPassword: Yup.string().oneOf([Yup.ref("password"), null], "Passwords must match").required("Repeat Password is required!"),
   });
 
   const handleFormSubmit = async (values) => {
     console.log("Form Values:", values);
     try {
-      // Your form submission logic goes here
+      // Sends a request to backend to handle the forgot password functionality
+      const response = await Axios.post("/forgot-password", { email: values.email });
+
+      // Handle response from the backend (display a success message)
+      console.log(response.data);
     } catch (error) {
       console.log(error);
     }
@@ -118,7 +113,6 @@ const Registration = () => {
   return (
     <Wrapper>
       <FormWrapper>
-        <img src="./assets/logos/Logo-main-no-bg.png" alt="logo" width= '250px' style={{margin: '-120px auto 20px'}}/>
         <Formik
           onSubmit={handleFormSubmit}
           initialValues={initialValues}
@@ -126,21 +120,6 @@ const Registration = () => {
         >
           {({ values, errors, touched, handleBlur, handleChange, handleSubmit, isSubmitting }) => (
             <form onSubmit={handleSubmit} className="form">
-              <Box width={300} sx={{ mb: 2, width: "100%", display: "flex" }}>
-                <PersonIcon sx={{ color: "action.active", mr: 1, mt: 2 }} />
-                <InputField
-
-                  size="small"
-                  variant="standard"
-                  name="username"
-                  label="Username"
-                  value={values.username}
-                  helperText={touched.username && errors.username}
-                  error={Boolean(errors.username && touched.username)}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                />
-              </Box>
               <Box width={300} sx={{ mb: 2, width: "100%", display: "flex" }}>
                 <EmailIcon sx={{ color: "action.active", mr: 1, mt: 2 }} />
                 <InputField
@@ -150,52 +129,22 @@ const Registration = () => {
                   label="Email"
                   type="email"
                   value={values.email}
-                  helperText={touched.email && (errors.email || errMsgMail)}
-                  error={Boolean((errors.email || errMsgMail) && touched.email)}
+                  helperText={touched.email && errors.email}
+                  error={Boolean(errors.email && touched.email)}
                   onChange={handleChange}
                   onBlur={handleBlur}
                 />
               </Box>
-              <Box width={300} sx={{ mb: 2, width: "100%", display: "flex" }}>
-                <KeyIcon sx={{ color: "action.active", mr: 1, mt: 2 }} />
-                <InputField
-                  size="small"
-                  variant="standard"
-                  name="password"
-                  label="Password"
-                  type="password"
-                  value={values.password}
-                  helperText={touched.password && (errors.password || errMsgPass)}
-                  error={Boolean((errors.password || errMsgPass) && touched.password)}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                />
-              </Box>
-              <Box width={300} sx={{ mb: 2, width: "100%", display: "flex" }}>
-                <KeyIcon sx={{ color: "action.active", mr: 1, mt: 2 }} />
-                <InputField
-                  size="small"
-                  variant="standard"
-                  name="repeatPassword"
-                  label="Repeat Password"
-                  type="password"
-                  value={values.repeatPassword}
-                  helperText={touched.repeatPassword && errors.repeatPassword}
-                  error={Boolean(errors.repeatPassword && touched.repeatPassword)}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                />
-              </Box>
-              <StyledButton type="submit" variant="contained" disabled={isSubmitting}>Register</StyledButton>
+              <StyledButton type="submit" variant="contained" disabled={isSubmitting}>Send Reset Email</StyledButton>
             </form>
           )}
         </Formik>
         <Box mt={2}>
-          Already have an account? <Link to="/">Login</Link>
+          Remembered your password? <Link to="/login">Login</Link>
         </Box>
       </FormWrapper>
     </Wrapper>
   );
 };
 
-export default Registration;
+export default ForgotPassword;

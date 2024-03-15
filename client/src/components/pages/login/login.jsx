@@ -173,7 +173,7 @@ const Login = () => {
                             <StyledButton type="submit" variant="contained" disabled={isSubmitting}>Sign In</StyledButton>
                             <Box sx={{ mt: 2, display: 'flex', justifyContent: 'start'}}>
                                 <p style={{margin:0}}>Don't have an account?</p>
-                                <Link to="/signup" style={{margin:'0 10px', color: '#638889', }}>Sign Up</Link>
+                                <Link to="/register" style={{margin:'0 10px', color: '#638889', }}>Sign Up</Link>
                             </Box>
                         </form>
                     )}
