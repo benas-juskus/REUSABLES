@@ -49,7 +49,6 @@ module.exports = {
     const searchResult = [];
     
     try {
-      const keys = ["name", "description"];
       const searchByName = (data: any) => {
         return data.filter((item: any) => 
            item.name.toLowerCase().includes(q));
