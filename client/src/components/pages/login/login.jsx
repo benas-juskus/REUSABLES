@@ -1,32 +1,14 @@
 import { useState } from "react";
 import {Formik} from 'formik'
 import * as Yup from 'yup'
-import { createTheme, Button, Box} from "@mui/material";
+import {Button, Box} from "@mui/material";
 import TextField from '@mui/material/TextField';
 import EmailIcon from '@mui/icons-material/Email';
 import KeyIcon from '@mui/icons-material/Key';
 import styled from "@emotion/styled";
 import Axios  from 'axios';
-import { Link } from 'react-router-dom'
-
-
-// styled elements and color theme
-const formTheme = createTheme({
-    palette: {
-      primary: {
-        light: "#757ce8",
-        main: "#9DBC98",
-        dark: "#638889",
-        contrastText: "#fff"
-      },
-      secondary: {
-        light: "#fcf6e8",
-        main: "#F9EFDB",
-        dark: "#EBD9B4",
-        contrastText: "#000"
-      }
-    }
-  });
+import { Link } from 'react-router-dom';
+import colorTheme from "../../layout/colorTheme";
 
 const InputField = styled(TextField)({
     '& input:-webkit-autofill': {
@@ -34,10 +16,10 @@ const InputField = styled(TextField)({
         backgroundColor: 'transparent',
     },
     '& label.Mui-focused': {
-        color: formTheme.palette.primary.dark,
+        color: colorTheme.palette.primary.dark,
     },
     '& .MuiInputBase-input': {
-        color: formTheme.palette.primary.dark,
+        color: colorTheme.palette.primary.dark,
     },
     width: '80%'
 });
@@ -61,7 +43,7 @@ const FormWrapper = styled(Box) ({
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
-    backgroundColor: formTheme.palette.secondary.light,
+    backgroundColor: colorTheme.palette.secondary.light,
     borderRadius: 7,
     padding: '0 30px 30px 30px',
     display: 'flex',
@@ -81,10 +63,10 @@ const FormWrapper = styled(Box) ({
     },
 })
 const StyledButton = styled(Button)({
-    backgroundColor: formTheme.palette.primary.main,
+    backgroundColor: colorTheme.palette.primary.main,
     color: 'white',
     '&:hover': {
-        backgroundColor: formTheme.palette.primary.dark,
+        backgroundColor: colorTheme.palette.primary.dark,
     },
     borderRadius: 20,
     alignSelf: 'flex-start'
@@ -94,8 +76,8 @@ const StyledButton = styled(Button)({
 
 const Login = () => {
 
-    const [errMsgPass, setErrMsgPass] = useState("");
     const [errMsgMail, setErrMsgMail] = useState("");
+    const [errMsgPass, setErrMsgPass] = useState("");
 
     // initial login credentials
     const initialValues = {
@@ -112,19 +94,37 @@ const Login = () => {
   });
 
   const handleFormSubmit = async (values) => {
-    console.log("Form Values:", values);
+    // console.log("Form Values:", values);
     try {
-        const response = await Axios.post("/test", {email: values.email, password: values.password});
-        if (response.data.user) {
-            setErrMsgMail("");
-            if (response.data.errMsgPass) {
-                setErrMsgPass(response.data.errMsgPass);
-            } else setErrMsgPass("");
-        } else {
-            setErrMsgMail(response.data.errMsgMail);
-        }     
+        const response = await Axios.post("/login", {email: values.email, password: values.password});
+        console.log("Response: ", response.data);
+        localStorage.setItem("token", response.data.token);
+        // setErrMsgMail("");
+        // setErrMsgPass("");
     } catch (error) {
-        console.log(error);
+        // console.log(error);
+        // console.log(error.response.data.message);
+
+        if (error.response.data.validation) {
+            let messages = [];
+            let errArray = error.response.data.validation.errors;
+            for (let err of errArray) {
+                if (err.path === "email") {
+                    messages.push(err.msg);
+                    setErrMsgMail(messages.join(','));
+                    setErrMsgPass("");
+                } else {
+                    messages.push(err.msg);
+                    setErrMsgPass(messages.join(','));
+                }
+            }
+        }
+
+        if (error.response.data.errorFor === "email") {
+            setErrMsgMail(error.response.data.message);
+        } else {
+            setErrMsgPass(error.response.data.message);
+        }
     }
   }
 
@@ -149,7 +149,7 @@ const Login = () => {
                                     type="email"
                                     value={values.email} 
                                     helperText={touched.email && (errors.email || errMsgMail)}
-                                    error={Boolean((errors.email || errMsgMail) && touched.email)}
+                                    error={Boolean((errors.email || errMsgMail !== "") && touched.email)}
                                     onChange={handleChange}
                                     onBlur={handleBlur}
                                 />
@@ -164,7 +164,7 @@ const Login = () => {
                                     type="password" 
                                     value={values.password} 
                                     helperText={touched.password && (errors.password || errMsgPass)}
-                                    error={Boolean((errors.password || errMsgPass) && touched.password)}
+                                    error={Boolean((errors.password || errMsgPass !== "") && touched.password)}
                                     onChange={handleChange}
                                     onBlur={handleBlur}
                                 />
