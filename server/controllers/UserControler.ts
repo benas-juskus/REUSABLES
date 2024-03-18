@@ -52,13 +52,15 @@ const UserControler = {
     const hashedPassword = await bcryptjs.hash(data.password, 10);
     data.password = hashedPassword;
     let censorUserName = false;
+    let censoredWords: string[] = [];
 
     try {
       const censor = await prisma.censorship.findMany();
       for (let word of censor) {
         if (data.username.includes(word.string)) {
+          word.string = `'${word.string}'`; 
+          censoredWords.push(word.string);
           censorUserName = true;
-          break;
         } 
       }
     } catch (error) {
@@ -85,7 +87,7 @@ const UserControler = {
           } else res.status(403).json({ message: "User already exists" });
         } else {
           if (censorUserName) {
-            res.status(403).json({ message: "Use of bad language is not allowed!" });
+            res.status(403).json({ message: `Use of bad language is not allowed! Remove ${censoredWords.join(", ")}` });
           } else {
             const new_user = await UserModel.create(data);
             res
