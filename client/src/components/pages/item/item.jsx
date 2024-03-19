@@ -61,7 +61,7 @@ const ItemPage= ({ user_data}) => {
                 </Wrapper>
                 <ItemInfo item={item} for_sale={item.for_sale} exchange={item.exchange}/>
             </Container>    
-            <Footer />
+            {/* <Footer /> */}
         </>
     )
 };

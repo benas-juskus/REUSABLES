@@ -3,10 +3,9 @@ import styled from "@emotion/styled";
 import { useEffect, useState } from "react";
 
 const itemImages =[
-    
     { photo: "https://picsum.photos/500/500"},
     { photo: "https://picsum.photos/500/504"},
-    { photo: "https://picsum.photos/500/501", main: true},
+    { photo: "https://picsum.photos/500/501"},
     { photo: "https://picsum.photos/500/502"},
     { photo: "https://picsum.photos/500/503"},
 ]
@@ -24,15 +23,15 @@ const Wrapper = styled(Box) ({
     
 })
 const MainPhoto = styled(Box) ({
-    width: "30rem",
-    height: "30rem",
+    width: "25rem",
+    height: "25rem",
     borderRadius: "5px",
     backgroundSize: "cover",
     
 })
 const SecondaryPhoto = styled(Box) ({
     width: "100%",
-    height: "7rem",
+    height: "5rem",
     borderRadius: "5px",
     backgroundSize: "cover",
 
@@ -45,12 +44,18 @@ const ItemGallery = () => {
     const [secondaryPhotos, setSecondaryPhotos] = useState([]);
 
     useEffect(() => {
-        setMainPhoto(itemImages.find((item) => item.main === true).photo)
 
-        setSecondaryPhotos(
-            itemImages.filter((item) => item.main !== true)
-            )
-        console.log(secondaryPhotos);
+        setSecondaryPhotos(Array.from(itemImages));
+        console.log(itemImages);
+        let mainImg = itemImages.shift()
+        console.log(mainImg);
+        setMainPhoto(mainImg.photo);
+
+        // setSecondaryPhotos = 
+        // // setSecondaryPhotos(
+        // //     itemImages.filter((item) => item.main !== true)
+        // //     )
+        // console.log(secondaryPhotos);
     }, [])
     
     return (
