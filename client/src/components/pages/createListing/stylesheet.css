@@ -1,0 +1,20 @@
+.StyledMain {
+    margin: auto;
+    display: flex;
+    border: 1px solid;
+    padding: 10px;
+}
+.StyledMain img {
+    width: 300px;
+    height: 300px;
+}
+.StyledMain .left {
+    border: 1px solid;
+}
+.StyledMain .middle {
+    justify-content: left;
+    align-items: left;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}

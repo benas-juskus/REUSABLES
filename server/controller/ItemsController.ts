@@ -34,6 +34,7 @@ module.exports = {
     }
   },
   getAllItems: async function (req: Request, res: Response) {
+    console.log("fetching")
     try {
       const response = await prisma.items.findMany();
       res.status(200).json(response);
@@ -62,17 +63,19 @@ module.exports = {
     }
   },
   createItem: async function (req: Request, res: Response) {
+    console.log("received", req.body);
     const {
-      user_id,
-      subcategories_id,
-      name,
-      description,
-      price,
-      for_sale,
-      exchange,
-      visibility,
+      user_id: user_id,
+      subcategories_id: subcategories_id,
+      name: name,
+      description: description,
+      price: price,
+      for_sale: for_sale,
+      exchange: exchange,
+      visibility: visibility,
     } = req.body;
     try {
+      console.log("proccesing image", req.body.photo);
       const ext: { [key: string]: string } = {
         "image/webp": ".webp",
         "image/png": ".png",
@@ -90,23 +93,25 @@ module.exports = {
           photo: file_name,
         },
       });
+      console.log("inserting data")
       const item = await prisma.items.create({
         data: {
           users_id: Number(user_id),
           subCategories_id: Number(subcategories_id),
           name: String(name),
-          photo_id: Number(photo.id),
+          photo_id: 1,
           description: String(description),
           price: Number(price),
           for_sale: Boolean(for_sale),
           exchange: Boolean(exchange),
           visibility: Boolean(visibility),
-        },
+        }
       });
       res.status(201).json({ status: "created succesfully", data: { item } });
     } catch (error) {
       if (hasMessage(error)) {
         res.status(500).json({ msg: error.message });
+        console.log(error);
       }
     }
   },

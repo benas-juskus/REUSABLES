@@ -5,6 +5,7 @@ const router = express.Router();
 
 router.get("/first", CategoriesController.getCategory);
 router.get("/", CategoriesController.getAllCategories);
+router.get("/categories-subcategories", CategoriesController.getAllCategoriesSubcategories);
 router.post("/", CategoriesController.createCategory);
 // router.delete("/delmany", CategoriesController.deleteSelectedCategories);
 router.get("/:id", CategoriesController.getCategoryById);

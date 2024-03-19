@@ -11,7 +11,7 @@ const CategoriesManager = () => {
   const [nr, setnr] = useState({})
 
   useEffect(() => {
-    fetch("/categories/")
+    fetch("/categories/categories-subcategories")
       .then(response => response.json())
       .then(data => {
         setCategories(data);

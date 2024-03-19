@@ -4,6 +4,7 @@ import App from './app/app'
 import Login from './components/pages/login/login'
 import Dashboard from  './components/pages/dashboard/dashboard';
 import CategoriesManager from './components/pages/categoriesManager/categoriesManager';
+import CreateListing from './components/pages/createListing/createListing';
 
 import {
   createBrowserRouter,
@@ -19,6 +20,7 @@ const router = createBrowserRouter(
           <Route path="/login" element={<Login />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/categories" element={<CategoriesManager />} />
+          <Route path="/create" element={<CreateListing />} />
         </>
   )
 );
