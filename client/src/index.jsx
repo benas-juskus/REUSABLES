@@ -4,6 +4,7 @@ import App from './app/app'
 import Login from './components/pages/login/login'
 import Dashboard from  './components/pages/dashboard/dashboard';
 import SignUp from './components/sign_up/sign-up'
+import ForgotPassword from './components/forgot_password/forgot-pasword'
 import {
   createBrowserRouter,
   createRoutesFromElements,
@@ -16,6 +17,7 @@ const router = createBrowserRouter(
         <>
           <Route path="/" element={<Login />} />
           <Route path="/register" element={<SignUp />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
         </>
   )
 );

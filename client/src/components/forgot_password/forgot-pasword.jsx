@@ -4,6 +4,7 @@ import * as Yup from "yup";
 import { createTheme, Button, Box } from "@mui/material";
 import TextField from "@mui/material/TextField";
 import EmailIcon from "@mui/icons-material/Email";
+import PersonIcon from '@mui/icons-material/Person';
 import styled from "@emotion/styled";
 import Axios from "axios";
 import { Link } from "react-router-dom";
@@ -113,6 +114,7 @@ const ForgotPassword = () => {
   return (
     <Wrapper>
       <FormWrapper>
+      <img src="./assets/logos/Logo-main-no-bg.png" alt="logo" width= '250px' style={{margin: '-120px auto 20px'}}/>
         <Formik
           onSubmit={handleFormSubmit}
           initialValues={initialValues}
@@ -140,7 +142,7 @@ const ForgotPassword = () => {
           )}
         </Formik>
         <Box mt={2}>
-          Remembered your password? <Link to="/login">Login</Link>
+          Remembered your password? <Link to="/">Login</Link>
         </Box>
       </FormWrapper>
     </Wrapper>
