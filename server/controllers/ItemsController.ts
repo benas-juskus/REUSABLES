@@ -199,4 +199,22 @@ module.exports = {
       }
     }
   },
+  countFavItems: async function(req: Request, res: Response) {
+
+    try {
+      const favItemCount = await prisma.favouriteItems.count({
+        where: {items_id: Number(req.params.id)}
+      })
+      if (favItemCount) {
+        res.status(200).json(favItemCount)
+      } else {
+        res.json(false)
+      }
+      // res.json(20)
+    } catch (error) {
+      if (hasMessage(error)) {
+        res.status(500).json({ msg: error.message });
+      }
+    }
+  } 
 };

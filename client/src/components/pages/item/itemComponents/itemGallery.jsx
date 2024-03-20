@@ -31,7 +31,7 @@ const MainPhoto = styled(Box) ({
 })
 const SecondaryPhoto = styled(Box) ({
     width: "100%",
-    height: "5rem",
+    height: "4.6rem",
     borderRadius: "5px",
     backgroundSize: "cover",
 
