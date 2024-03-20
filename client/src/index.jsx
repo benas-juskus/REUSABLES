@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom/client'
 import App from './app/app'
 import Login from './components/pages/login/login'
 import Dashboard from  './components/pages/dashboard/dashboard';
+import LiveFeedComponent from './components/pages/home_page/LiveFeed';
 import {
   createBrowserRouter,
   createRoutesFromElements,
@@ -13,7 +14,7 @@ import {
 const router = createBrowserRouter(
   createRoutesFromElements(
         <>
-          <Route path="/" element={<Login />} />
+          <Route path="/" element={<LiveFeedComponent />} />
           <Route path="/login" element={<Login />} />
           <Route path="/dashboard" element={<Dashboard />} />
         </>
