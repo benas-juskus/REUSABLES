@@ -4,13 +4,13 @@ import colorTheme from "./colorTheme";
 
 const Wrapper = styled(Box) ({
     width: "100%",
-    position: "absolute",
-    bottom: "0",
+    // position: "absolute",
+    // bottom: "0",
     display: 'flex',
     justifyContent: 'center',
     backgroundColor: colorTheme.palette.primary.main,
     color: colorTheme.palette.secondary.light,
-    padding: '1.5em 0.5em 1.5em 3em'
+    padding: '1.5em 0 1.5em',
 });
 
 const Footer = () => {

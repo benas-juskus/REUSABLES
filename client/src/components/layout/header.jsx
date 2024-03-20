@@ -26,16 +26,18 @@ const mock_categories = [
 ];
 
 const Wrapper = styled(Box) ({
+    width: "100%",
     display: 'flex',
     justifyContent: 'space-between',
     backgroundColor: colorTheme.palette.primary.main,
-    padding: '1.5em 0.5em 1.5em 3em'
+    padding: '1.5em 0 1.5em'
 });
 
 const Logo = styled(Box) ({
     alignSelf: "center",
     height: "7em",
-    width: "7em"
+    width: "7em",
+    marginLeft: "3em"
 });
 
 const Nav = styled(Box) ({
