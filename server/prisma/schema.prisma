@@ -142,9 +142,6 @@ model Transactions {
   created_at  DateTime   @default(now())
   Ratings     Ratings[]
   Messages    Messages[]
-  // Items       Items[]
-  // Items       Items?     @relation(fields: [itemsId], references: [id])
-  // itemsId     Int?       @db.UnsignedInt
 }
 
 model Ratings {
