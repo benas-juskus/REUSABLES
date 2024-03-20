@@ -19,13 +19,9 @@ const CreateItem = () => {
 
   const [photo, setPhoto] = useState(null);
   const [price, setPrice] = useState("");
-  const [chosenId, setChosenId] = useState("");
 
   const [subcategories, setSubcategories] = useState([]);
   const [tradesubcategories, setTradeSubcategories] = useState([]);
-
-  const [selectedCategoryId, setSelectedCategoryId] = useState("");
-  const [hasCategoryChanged, setHasCategoryChanged] = useState(false);
 
   //Fetch categories
   useEffect(() => {
@@ -80,6 +76,10 @@ const CreateItem = () => {
     fetchTradeSubcategories();
   }, [tradecategoryId]);
 
+  const handleFileChange = (event) => {
+    setPhoto(event.target.files[0]);
+  };
+
   const handlefor_saleChange = (e) => {
     setfor_sale(e.target.checked);
   };
@@ -97,6 +97,7 @@ const CreateItem = () => {
     price,
     visibility,
     subcategories_id,
+    tradesubcategories_id,
     photo
   ) => {
     event.preventDefault();
@@ -105,6 +106,7 @@ const CreateItem = () => {
       const formData = new FormData();
       formData.append("user_id", 1);
       formData.append("subcategories_id", subcategories_id);
+      formData.append("tradesubcategories_id", tradesubcategories_id);
       formData.append("name", name);
       formData.append("description", description);
       formData.append("price", price);
@@ -130,7 +132,6 @@ const CreateItem = () => {
   const handleCategoryChange = async (event) => {
     const selectedCategoryId = event.target.value;
     setCategoryId(selectedCategoryId);
-    setHasCategoryChanged(true);
   };
 
   const handleTradeCategoryChange = async (event) => {
@@ -151,6 +152,7 @@ const CreateItem = () => {
             price,
             visibility,
             subcategories_id,
+            tradesubcategories_id,
             photo
           )
         }
@@ -173,7 +175,7 @@ const CreateItem = () => {
                 type="file"
                 id="photo"
                 name="photo"
-                onChange={(e) => setPhoto(e.target.files[0])}
+                onChange={handleFileChange}
               />
             </div>
           </div>
@@ -223,7 +225,8 @@ const CreateItem = () => {
             </div>
 
             <div>
-              <div>
+              <div> 
+                <label for="for_sale">For sale</label>
                 <input
                   type="checkbox"
                   name=""
@@ -231,7 +234,7 @@ const CreateItem = () => {
                   value={for_sale}
                   onChange={handlefor_saleChange}
                 />
-                <label for="for_sale">For sale</label>
+               
                 {for_sale ? (
                 
                     <input
@@ -247,6 +250,7 @@ const CreateItem = () => {
                 ) : null}
               </div>
               <div>
+                <label for="exchange">Trade</label>
                 <input
                   type="checkbox"
                   name=""
@@ -254,7 +258,7 @@ const CreateItem = () => {
                   value={exchange}
                   onChange={handleexchangeChange}
                 />
-                <label for="exchange">Trade</label>
+                
                 {exchange ? (
                   <div>
                     <label>I want to exchange this to:</label>
@@ -262,6 +266,7 @@ const CreateItem = () => {
 
 
               <label>Category:</label>
+                  {/* I didnt find the controller for exchange to table so this function does not fetch any data to the server right now */}
               <select
                 name="category"
                 value={tradecategoryId}
