@@ -4,6 +4,21 @@
     border: 1px solid;
     padding: 10px;
 }
+.dropzone {
+    position: relative;
+    display: flex;
+    border: 1px solid;
+    justify-content: center;
+    align-items: center;
+    width: 300px;
+    height: 300px;
+}
+.dropzone p {
+    position: absolute;
+}
+.drag-active {
+    filter: brightness(1.1);
+}
 .StyledMain img {
     width: 300px;
     height: 300px;

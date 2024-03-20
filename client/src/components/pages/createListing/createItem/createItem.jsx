@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
+import { useDropzone } from 'react-dropzone'
 import "../stylesheet.css";
 
 const CreateItem = () => {
@@ -6,22 +7,23 @@ const CreateItem = () => {
   const [categories, Categories] = useState([]);
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
-
   const [for_sale, setfor_sale] = useState(false);
   const [exchange, setexchange] = useState(false);
-
   const [visibility, setVisibility] = useState("1");
-
   const [categoryId, setCategoryId] = useState("");
   const [subcategories_id, setsubcategories_id] = useState("");
   const [tradecategoryId, settradeCategoryId] = useState("");
   const [tradesubcategories_id, settradesubcategories_id] = useState("");
-
   const [photo, setPhoto] = useState(null);
   const [price, setPrice] = useState("");
-
   const [subcategories, setSubcategories] = useState([]);
   const [tradesubcategories, setTradeSubcategories] = useState([]);
+
+
+  const onDrop = useCallback(acceptedFiles => {
+    setPhoto(acceptedFiles[0]);
+  }, [])
+  const {getRootProps, getInputProps, isDragActive} = useDropzone({onDrop})
 
   //Fetch categories
   useEffect(() => {
@@ -75,10 +77,6 @@ const CreateItem = () => {
 
     fetchTradeSubcategories();
   }, [tradecategoryId]);
-
-  const handleFileChange = (event) => {
-    setPhoto(event.target.files[0]);
-  };
 
   const handlefor_saleChange = (e) => {
     setfor_sale(e.target.checked);
@@ -158,27 +156,22 @@ const CreateItem = () => {
         }
       >
         <div class="StyledMain">
-          <div class="left">
-            <img
-              src={
-                photo
-                  ? URL.createObjectURL(photo)
-                  : "https://www.freeiconspng.com/thumbs/no-image-icon/no-image-icon-6.png"
-              }
-              alt="/nophoto.jpg"
-            />
-
-            <div>
-              <label for="photo">Select a photo:</label>
-              <input
-                accept="image/*"
-                type="file"
-                id="photo"
-                name="photo"
-                onChange={handleFileChange}
-              />
+        <div {...getRootProps()}>
+        {photo ? (
+          <img src={URL.createObjectURL(photo)} alt="" />
+          ) : (
+            <div class="dropzone">
+              <img src="https://st3.depositphotos.com/23594922/31822/v/450/depositphotos_318221368-stock-illustration-missing-picture-page-for-website.jpg" alt="" />              
+              <p>Select files or drag and drop them here</p>
             </div>
-          </div>
+          )} 
+                     
+      <input {...getInputProps()} />
+      {
+        isDragActive ? (
+          <p>Drop the files here ...</p>
+      ) : null}
+    </div>
 
           <div class="middle">
             <div>
