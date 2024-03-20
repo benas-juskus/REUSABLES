@@ -166,3 +166,7 @@ model Messages {
   seen           Boolean
   created_at     DateTime     @default(now())
 }
+
+model Censorship {
+  string String @id
+}
