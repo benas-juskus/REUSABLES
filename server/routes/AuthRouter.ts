@@ -10,5 +10,6 @@ router.post('/login', AuthRequests.login, AuthControler.login);
 router.delete('/logout/:id', AuthControler.logout);
 router.delete('/logoutall/:id', AuthControler.logoutAllDevices);
 router.post('/register', UserRequests.createUser, AuthControler.register);
+router.post('/auth',AuthControler.authToken);
 
 module.exports = router

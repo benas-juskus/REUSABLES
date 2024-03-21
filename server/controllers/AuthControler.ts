@@ -50,6 +50,13 @@ const AuthControler = {
                     try {
                         const passMatch = await bcryptjs.compare(data.password, user.password);
                         if ( passMatch ){
+                            //logika istrinti sena tokena is db su vienodu device'u
+                            const checkToken = await prisma.tokens.deleteMany({
+                                where: {
+                                    user_id: user.id,
+                                    device: String(req.headers['user-agent'])
+                                }
+                            })
                             console.log(req.headers['user-agent']);
                             const deviseData = req.headers['user-agent'];
                             const token = await prisma.tokens.create({
@@ -102,6 +109,34 @@ const AuthControler = {
                 }
             })
             res.status(200).json({message: 'User was logged out from all devices!'});
+        } catch (error) {
+            console.log(error);
+            res.status(500).json({message: error});
+        }
+    },
+    authToken: async (req: Request, res: Response) => {
+        const usrToken = req.body.token
+        const user_id = req.body.id
+        try {
+            const token = await prisma.tokens.findFirst({
+                where: {
+                    user_id: user_id,
+                    device: String(req.headers['user-agent'])
+                }
+            })
+            if (token) {
+                console.log("userio tokenas",usrToken);
+                console.log("DB tokenas",token.token);
+                console.log("yra tokenas",token);
+                if (token.token === usrToken) {
+                    res.status(200).json({auth: true});
+                } else {
+                    res.status(404).json({auth: false});
+                }
+            } else {
+                res.status(404).json({message: 'Token not found', auth: false});
+            }
+            
         } catch (error) {
             console.log(error);
             res.status(500).json({message: error});
