@@ -7,7 +7,7 @@ import EmailIcon from '@mui/icons-material/Email';
 import KeyIcon from '@mui/icons-material/Key';
 import styled from "@emotion/styled";
 import Axios  from 'axios';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import colorTheme from "../../layout/colorTheme";
 
 const InputField = styled(TextField)({
@@ -76,6 +76,8 @@ const StyledButton = styled(Button)({
 
 const Login = () => {
 
+    const navigate = useNavigate();
+
     const [errMsgMail, setErrMsgMail] = useState("");
     const [errMsgPass, setErrMsgPass] = useState("");
 
@@ -98,7 +100,9 @@ const Login = () => {
     try {
         const response = await Axios.post("/login", {email: values.email, password: values.password});
         console.log("Response: ", response.data);
-        localStorage.setItem("token", response.data.token);
+        localStorage.setItem("token", response.data.token.token);
+        localStorage.setItem("loggedUsr", response.data.token.user_id);
+        navigate("/dashboard");
         // setErrMsgMail("");
         // setErrMsgPass("");
     } catch (error) {

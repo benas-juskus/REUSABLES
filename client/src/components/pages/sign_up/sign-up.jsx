@@ -7,7 +7,7 @@ import EmailIcon from "@mui/icons-material/Email";
 import KeyIcon from "@mui/icons-material/Key";
 import styled from "@emotion/styled";
 import Axios from "axios";
-import { Link } from "react-router-dom";
+import { Link, useNavigate} from "react-router-dom";
 import PersonIcon from '@mui/icons-material/Person';
 
 // Styled elements and color theme
@@ -87,6 +87,9 @@ const StyledButton = styled(Button)({
 });
 
 const Registration = () => {
+
+  const navigate = useNavigate();
+
   const [errMsgPass, setErrMsgPass] = useState("");
   const [errMsgMail, setErrMsgMail] = useState("");
   const [errMsgName, setErrMsgName] = useState("");
@@ -118,6 +121,8 @@ const Registration = () => {
         repeatPassword: values.repeatPassword,
       })
       console.log(newUser.data);
+      localStorage.setItem("token", newUser.data.token.token);
+      navigate("/dashboard");
       // Your form submission logic goes here
     } catch (error) {
       console.log("klaida",error);
