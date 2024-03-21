@@ -12,10 +12,10 @@ const LiveFeedComponent = () => {
   const fetchMoreItems = async () => {
     setLoading(true);
     try {
-      const newItemsResponse = await fetch("http://localhost:8000/items/all");
+      const newItemsResponse = await fetch("http://localhost:8000/items/rand");
       const newItems = await newItemsResponse.json();
+      console.log("newItems", newItems);
       setFeedData((prevItems) => [...prevItems, ...newItems]);
-      console.log(newItems);
     } catch (error) {
       console.error("Error fetching data:", error);
     } finally {
@@ -35,11 +35,19 @@ const LiveFeedComponent = () => {
     window.addEventListener("scroll", handleScroll);
     const fetchFeedData = async () => {
       try {
-        const response = await fetch("http://localhost:8000/items/all");
+        const response = await fetch("http://localhost:8000/items/rand");
+        // console.log("response", response);
         const data = await response.json();
+        // const response2 = await fetch("http://localhost:8000/items/rand");
+        // console.log("response2", response2);
+        // const data2 = await response2.json();
+        // console.log("data", data);
+        // console.log("data2", data2);
         const photoResponse = await fetch("http://localhost:8000/items/photos");
         const photoJson = await photoResponse.json();
         const photo = photoJson.data.photo;
+        //     console.log("data", data);
+        //     console.log("photo", photo);
         setFeedData(data);
         setPhotoData(photo);
       } catch (error) {
@@ -48,11 +56,11 @@ const LiveFeedComponent = () => {
     };
     fetchFeedData();
 
-    const refreshInterval = setInterval(fetchFeedData, 60000);
+    // const refreshInterval = setInterval(fetchFeedData, 60000);
 
     return () => {
       window.removeEventListener("scroll", handleScroll);
-      clearInterval(refreshInterval);
+      // clearInterval(refreshInterval);
     };
   }, []);
   return (
@@ -62,13 +70,14 @@ const LiveFeedComponent = () => {
         <div id="container" className={styles2}>
           <h2>Live Feed</h2>
           <ul>
-            {feedData.map((item, _) => (
-              <li key={item.id} style={{ width: "20%" }}>
-                <img src={photoData[0].photo} />, <br /> {item.name}, <br />{" "}
-                {item.price} &euro; <br />
-                <button>Add to cart</button> <button>Add to wishlist</button>
-              </li>
-            ))}
+            {feedData &&
+              feedData.map((item, index) => (
+                <li key={item.id} style={{ width: "20%" }}>
+                  <img src="https://images.unsplash.com/photo-1707343843344-011332037abb?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" />
+                  , <br /> {item.name}, <br /> {item.price} &euro; <br />
+                  <button>Add to cart</button> <button>Add to wishlist</button>
+                </li>
+              ))}
           </ul>
           {loading && <p>Loading...</p>}
         </div>

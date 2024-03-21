@@ -43,6 +43,31 @@ module.exports = {
       }
     }
   },
+  getRandomItems: async function (req: Request, res: Response) {
+    try {
+      const everyID = await prisma.items.findMany({
+        select: { id: true },
+      });
+      const idArray = everyID.map((element) => element.id);
+      let randomIndexes = [];
+      let randomIdsFromTable = [];
+      for (let i = 0; i < 5; i++) {
+        randomIndexes.push(Math.floor(Math.random() * idArray.length));
+        randomIdsFromTable.push(idArray[randomIndexes[i]])
+      }
+      console.log(randomIndexes)
+      console.log(randomIdsFromTable);
+      
+      const randomElementsFromTable = await prisma.items.findMany({
+        where: { id: { in: randomIdsFromTable } },
+      });
+      res.status(200).json(randomElementsFromTable);
+    } catch (error) {
+      if (hasMessage(error)) {
+        res.status(500).json({ msg: error.message });
+      }
+    }
+  },
   getItemById: async function (req: Request, res: Response) {
     try {
       const response = await prisma.items.findUnique({
