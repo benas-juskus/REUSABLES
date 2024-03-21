@@ -88,7 +88,7 @@ const Login = () => {
     // form field validation schema
     const validationSchema = Yup.object().shape({
         password: Yup.string()
-            .min(6, "Password must be 6 character length")
+            .min(8, "Password must be 8 character length")
             .required("Password is required!"),
         email: Yup.string().email("Invalid Email address").required("Email is required!")
   });
@@ -102,7 +102,7 @@ const Login = () => {
         // setErrMsgMail("");
         // setErrMsgPass("");
     } catch (error) {
-        // console.log(error);
+        console.log(error);
         // console.log(error.response.data.message);
 
         if (error.response.data.validation) {

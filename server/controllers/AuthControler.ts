@@ -6,29 +6,14 @@ import { randomBytes } from 'crypto';
 const UserModel = require('../models/UserModel.ts')
 const bcryptjs = require('bcryptjs');
 const UserControler = require('./UserControler.ts')
-const crypto = require('crypto')
+const createToken  = require('./create_token.ts')
+
 // const { dataValidation } = require('../controlers/UserControler.ts');
 
 const prisma = new PrismaClient();
 
 // const createToken = () => require('crypto').randomBytes(64).toString('hex')
-const createToken = (expiresIn: number) => {
 
-    const expirationTimestamp = Math.floor(Date.now() / 1000) + expiresIn;
-
-    const payload = {
-        exp: expirationTimestamp
-    };
-    const serializedPayload = JSON.stringify(payload);
-    const key = crypto.randomBytes(32);
-    const iv = crypto.randomBytes(16);
-    const cypher = crypto.createCipheriv( 'aes-256-cbc', key, iv);
-    // const cypher = crypto.createCipher( 'aes-256-cbc', process.env.JWT_SECRET);
-    let encryptedPayload = cypher.update(serializedPayload, 'utf8', 'hex');
-    encryptedPayload += cypher.final('hex');
-
-    return encryptedPayload
-}
 
 interface Auth {
     email?: string;
