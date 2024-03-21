@@ -102,7 +102,7 @@ const Login = () => {
         console.log("Response: ", response.data);
         localStorage.setItem("token", response.data.token.token);
         localStorage.setItem("loggedUsr", response.data.token.user_id);
-        navigate("/dashboard");
+        navigate(`/user/${response.data.token.user_id}`);
         // setErrMsgMail("");
         // setErrMsgPass("");
     } catch (error) {

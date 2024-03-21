@@ -6,6 +6,7 @@ import RecentItemsList from './dashboardComponents/recentItems';
 import RecentChats from './dashboardComponents/recentChats';
 import { useEffect, useState } from 'react';
 import Axios from 'axios'
+import { useParams } from 'react-router-dom';
 
 // This is just some mock data for dev purposes.
 let user_data = {
@@ -30,13 +31,15 @@ let user_data = {
 };
 
 const Dashboard = () => {
-
+    
+    // will use this data for userprofile data
+    const { id } = useParams();
 
     const [userData, setUserData] = useState({})
 
-    useEffect(() => {// will use this data for userprofile data
+    useEffect(() => {
         const user = async () => {
-            const user = await Axios.post('/users/show', {id: Number(localStorage.getItem("loggedUsr"))})
+            const user = await Axios.post('/users/show', {id: Number(id)})
             setUserData(user.data);
             console.log(user.data);
         }
