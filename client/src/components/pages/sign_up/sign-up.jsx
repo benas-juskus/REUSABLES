@@ -7,7 +7,7 @@ import EmailIcon from "@mui/icons-material/Email";
 import KeyIcon from "@mui/icons-material/Key";
 import styled from "@emotion/styled";
 import Axios from "axios";
-import { Link } from "react-router-dom";
+import { Link, useNavigate} from "react-router-dom";
 import PersonIcon from '@mui/icons-material/Person';
 
 // Styled elements and color theme
@@ -87,8 +87,12 @@ const StyledButton = styled(Button)({
 });
 
 const Registration = () => {
+
+  const navigate = useNavigate();
+
   const [errMsgPass, setErrMsgPass] = useState("");
   const [errMsgMail, setErrMsgMail] = useState("");
+  const [errMsgName, setErrMsgName] = useState("");
 
   // Initial registration credentials
   const initialValues = {
@@ -100,7 +104,7 @@ const Registration = () => {
 
   // Form field validation schema
   const validationSchema = Yup.object().shape({
-    username: Yup.string().required("Username is required!"),
+    username: Yup.string().min(5, "Username must be at least 5 characters").required("Username is required!"),
     email: Yup.string().email("Invalid Email address").required("Email is required!"),
     password: Yup.string().min(6, "Password must be at least 6 characters").required("Password is required!"),
     repeatPassword: Yup.string().oneOf([Yup.ref("password"), null], "Passwords must match").required("Repeat Password is required!"),
@@ -108,10 +112,50 @@ const Registration = () => {
 
   const handleFormSubmit = async (values) => {
     console.log("Form Values:", values);
+    
     try {
+      const newUser = await Axios.post("/register", {
+        username: values.username,
+        email: values.email,
+        password: values.password,
+        repeatPassword: values.repeatPassword,
+      })
+      console.log(newUser.data);
+      localStorage.setItem("token", newUser.data.token.token);
+      navigate("/dashboard");
       // Your form submission logic goes here
     } catch (error) {
-      console.log(error);
+      console.log("klaida",error);
+
+      if (error.response.data.validation) {
+        let messages = [];
+        let errArray = error.response.data.validation.errors;
+        for (let err of errArray) {
+            if (err.path === "username") {
+                messages.push(err.msg);
+                setErrMsgName(messages.join(','));
+                // setErrMsgPass("");
+                // setErrMsgMail("");
+            } else if (err.path === "email") {
+                messages.push(err.msg);
+                setErrMsgMail(messages.join(','));
+            } else if (err.path === "password") {
+                messages.push(err.msg);
+                setErrMsgPass(messages.join(','));
+            } else {
+                messages.push(err.msg);
+                setErrMsgPass(messages.join(','));
+            }
+        }
+      }
+
+      if (error.response.data.errorFor === "username") {
+        setErrMsgName(error.response.data.message);
+      } else if ( error.response.data.errorFor === "email") {
+          setErrMsgMail(error.response.data.message);
+      } else {
+          setErrMsgPass(error.response.data.message);
+      }
     }
   };
 
@@ -129,14 +173,13 @@ const Registration = () => {
               <Box width={300} sx={{ mb: 2, width: "100%", display: "flex" }}>
                 <PersonIcon sx={{ color: "action.active", mr: 1, mt: 2 }} />
                 <InputField
-
                   size="small"
                   variant="standard"
                   name="username"
                   label="Username"
                   value={values.username}
-                  helperText={touched.username && errors.username}
-                  error={Boolean(errors.username && touched.username)}
+                  helperText={touched.email && (errors.email || errMsgName)}
+                  error={Boolean((errors.email || errMsgName) && touched.email)}
                   onChange={handleChange}
                   onBlur={handleBlur}
                 />
@@ -191,7 +234,7 @@ const Registration = () => {
           )}
         </Formik>
         <Box mt={2}>
-          Already have an account? <Link to="/">Login</Link>
+          Already have an account? <Link to="/login">Login</Link>
         </Box>
       </FormWrapper>
     </Wrapper>

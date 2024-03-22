@@ -4,13 +4,16 @@ import {Container} from "@mui/material";
 import UserDetails from './dashboardComponents/userDetails';
 import RecentItemsList from './dashboardComponents/recentItems';
 import RecentChats from './dashboardComponents/recentChats';
+import { useEffect, useState } from 'react';
+import Axios from 'axios'
+import { useParams, useNavigate } from 'react-router-dom';
 
 // This is just some mock data for dev purposes.
-const user_data = {
+let user_data = {
     id: 3,
     rating: 3.3,
-    username: "Meghan",
-    photo: "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2F1.bp.blogspot.com%2F-TlIRtOXmmDA%2FWS8Ar-jMLDI%2FAAAAAAAAH58%2Fb03hdJmdDTs6j0X9d9FQOlHWAHYTJC6KQCK4B%2Fs1600%2FStock%252Bimages%252Bare%252Boften%252Bcasted%252Bwith%252Battractive%252Bpeople%252B...-790465.jpg",
+    username: localStorage.getItem("loggedUsr"),
+    photo: "https://www.shutterstock.com/image-vector/blank-avatar-photo-place-holder-600nw-1095249842.jpg",
     items: [
         {id: 15, name: "Item Name", photo: "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fi5.walmartimages.com%2Fasr%2F75525e65-2fed-4d38-8749-e5ae1868b534.1520148fcfd9503a20d125194b5db9d6.jpeg"},
         {id: 16, name: "Item Name", photo: "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.antiquepottery.co.uk%2Fwp-content%2Fuploads%2F2019%2F08%2F1085899.jpg"},
@@ -28,6 +31,47 @@ const user_data = {
 };
 
 const Dashboard = () => {
+
+    const redirect = useNavigate();
+    
+    // will use this data for userprofile data
+    const { id } = useParams();
+
+    const [userData, setUserData] = useState({})
+
+    useEffect(() => {
+
+        const authorize = async () => {
+            const token = localStorage.getItem('token')
+            console.log(token);
+            if (token) {
+                try {
+                    const tokenAuth = await Axios.post('/auth', {token, id: Number(id)})
+                    if (tokenAuth.data) {
+                        console.log(tokenAuth.data);
+                        const user = await Axios.post('/users/show', {id: Number(id)});
+                        setUserData(user.data);
+                    } else {
+                        redirect('/login')
+                    } 
+                } catch (error) {
+                    redirect('/login')
+                    console.log(error);
+                }
+            } else {
+                redirect('/login')
+            }
+        }
+        // const user = async () => {
+        //     const user = await Axios.post('/users/show', {id: Number(id)})
+        //     setUserData(user.data);
+        //     // console.log(user.data);
+        // }
+        authorize()
+        // user()
+    }, [])
+
+
     return (
         <>
             <Heeader data={user_data}/>

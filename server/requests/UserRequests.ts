@@ -19,7 +19,7 @@ module.exports = {
             .isLength({ min: 8 }).withMessage("Password must be at least 8 characters long"),
             // to be added mode validations if needed (special chars, numbers... etc)
             // .matches(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/).withMessage("Password must contain at least 1 uppercase letter, 1 lowercase letter and 1 number"),
-        body('confirmPassword')
+        body('repeatPassword')
             .trim()
             .escape()
             .custom((value, { req }) => {
@@ -47,12 +47,12 @@ module.exports = {
             .isLength({ min: 8 }).withMessage("Password must be at least 5 characters long"),
             // to be added mode validations if needed (special chars, numbers... etc)
             // .matches(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/).withMessage("Password must contain at least 1 uppercase letter, 1 lowercase letter and 1 number"),
-        body('confirmPassword')
+        body('repeatPassword')
             .optional()
             .trim()
             .escape()
             .custom((value, { req }) => {
                 return value === req.body.password;
-            }).withMessage("Nesutampa slaptažodžiai"),
+            }).withMessage("Passwords don't match"),
     ]
 }

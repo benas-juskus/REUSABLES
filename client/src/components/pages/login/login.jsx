@@ -7,7 +7,7 @@ import EmailIcon from '@mui/icons-material/Email';
 import KeyIcon from '@mui/icons-material/Key';
 import styled from "@emotion/styled";
 import Axios  from 'axios';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import colorTheme from "../../layout/colorTheme";
 
 const InputField = styled(TextField)({
@@ -76,6 +76,8 @@ const StyledButton = styled(Button)({
 
 const Login = () => {
 
+    const navigate = useNavigate();
+
     const [errMsgMail, setErrMsgMail] = useState("");
     const [errMsgPass, setErrMsgPass] = useState("");
 
@@ -88,7 +90,7 @@ const Login = () => {
     // form field validation schema
     const validationSchema = Yup.object().shape({
         password: Yup.string()
-            .min(6, "Password must be 6 character length")
+            .min(8, "Password must be 8 character length")
             .required("Password is required!"),
         email: Yup.string().email("Invalid Email address").required("Email is required!")
   });
@@ -98,11 +100,13 @@ const Login = () => {
     try {
         const response = await Axios.post("/login", {email: values.email, password: values.password});
         console.log("Response: ", response.data);
-        localStorage.setItem("token", response.data.token);
+        localStorage.setItem("token", response.data.token.token);
+        localStorage.setItem("loggedUsr", response.data.token.user_id);
+        navigate(`/user/${response.data.token.user_id}`);
         // setErrMsgMail("");
         // setErrMsgPass("");
     } catch (error) {
-        // console.log(error);
+        console.log(error);
         // console.log(error.response.data.message);
 
         if (error.response.data.validation) {

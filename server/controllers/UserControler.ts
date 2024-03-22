@@ -6,7 +6,11 @@ import { PrismaClient } from "@prisma/client";
 // import { log } from 'console';
 const UserModel = require("../models/UserModel.ts");
 const bcryptjs = require("bcryptjs");
+const createToken = require("./create_token.ts");
+
+
 const prisma = new PrismaClient();
+
 
 function dataValidation(req: Request) {
   const errorMessages = validationResult(req);
@@ -79,20 +83,32 @@ const UserControler = {
             res.status(403).json({
               message:
                 "User with this username already exists, please use another username",
+              errorFor: "username",
             });
           } else if (user.email == data.email) {
             res.status(403).json({
               message: "User with this email already exists",
+              errorFor: "email",
             });
           } else res.status(403).json({ message: "User already exists" });
         } else {
           if (censorUserName) {
-            res.status(403).json({ message: `Use of bad language is not allowed! Remove ${censoredWords.join(", ")}` });
+            res.status(403).json({ message: `Use of inappropriate language is not allowed!`, errorFor: "username"});
           } else {
-            const new_user = await UserModel.create(data);
+            await UserModel.create(data);
+            const user = await UserModel.showOne({username: data.username})
+
+            const deviseData = req.headers['user-agent'];
+            const token = await prisma.tokens.create({
+                data: {
+                    user_id:  user.id,
+                    token: createToken(3600),
+                    device: String(deviseData)
+                }
+            })
             res
               .status(200)
-              .json({ user: new_user, message: "User created successfully" });
+              .json({ user: user, message: "User created successfully", token: token });
           }
          
         }

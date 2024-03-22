@@ -13,7 +13,7 @@ model Users {
   email             String           @unique
   password          String
   Role              Roles            @relation(fields: [role_id], references: [id])
-  role_id           Int              @db.UnsignedTinyInt
+  role_id           Int              @default(3) @db.UnsignedTinyInt
   createdAt         DateTime         @default(now())
   FavouriteItems    FavouriteItems[]
   Items             Items[]

@@ -35,7 +35,7 @@ const ProfilePicture = ({image}) => {
                             cursor: isHovered ? "pointer" : "auto",
                             maxWidth: "100%",
                             width: "20em", 
-                            height: "20em", 
+                            height: "auto", 
                             borderRadius: "50%",
                             objectFit: "cover",
                             }}
