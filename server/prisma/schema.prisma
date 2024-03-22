@@ -1,5 +1,6 @@
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["fullTextSearch", "fullTextIndex"]
 }
 
 datasource db {
@@ -72,6 +73,9 @@ model Items {
   Notifications     Notifications[]
   item1Transactions Transactions[]   @relation("item1")
   item2Transactions Transactions[]   @relation("item2")
+
+  @@fulltext([name])
+  @@fulltext([name, description])
 }
 
 model SubCategories {
