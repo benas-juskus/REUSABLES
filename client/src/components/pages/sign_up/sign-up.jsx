@@ -234,7 +234,7 @@ const Registration = () => {
           )}
         </Formik>
         <Box mt={2}>
-          Already have an account? <Link to="/">Login</Link>
+          Already have an account? <Link to="/login">Login</Link>
         </Box>
       </FormWrapper>
     </Wrapper>

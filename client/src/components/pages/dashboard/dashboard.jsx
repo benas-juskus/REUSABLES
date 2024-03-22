@@ -52,14 +52,14 @@ const Dashboard = () => {
                         const user = await Axios.post('/users/show', {id: Number(id)});
                         setUserData(user.data);
                     } else {
-                        redirect('/')
+                        redirect('/login')
                     } 
                 } catch (error) {
-                    redirect('/')
+                    redirect('/login')
                     console.log(error);
                 }
             } else {
-                redirect('/')
+                redirect('/login')
             }
         }
         // const user = async () => {
