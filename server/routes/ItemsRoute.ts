@@ -14,5 +14,6 @@ router.get("/:id", ItemsController.getItemById);
 router.patch("/:id", ItemsController.updateItem);
 router.patch("/:id/updatePhoto/:photoID", upload.single('photo'), GalleryController.updateItemPhoto);
 router.delete("/:id", ItemsController.deleteItem);
+router.get("/fav/:id", ItemsController.countFavItems)
 
 module.exports = router;

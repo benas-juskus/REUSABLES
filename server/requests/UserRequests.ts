@@ -16,7 +16,7 @@ module.exports = {
             .trim()
             .escape()
             .notEmpty().withMessage("Please enter a password")
-            .isLength({ min: 8 }).withMessage("Password must be at least 5 characters long"),
+            .isLength({ min: 8 }).withMessage("Password must be at least 8 characters long"),
             // to be added mode validations if needed (special chars, numbers... etc)
             // .matches(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/).withMessage("Password must contain at least 1 uppercase letter, 1 lowercase letter and 1 number"),
         body('confirmPassword')
