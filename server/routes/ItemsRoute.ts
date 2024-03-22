@@ -7,6 +7,7 @@ const router = express.Router();
 
 router.get("/first", ItemsController.getItem);
 router.get("/all", ItemsController.getAllItems);
+router.get("/search", ItemsController.searchItems);
 router.post("/", upload.single('photo'), ItemsController.createItem);
 router.delete("/delmany", ItemsController.deleteManyItems);
 router.get("/:id", ItemsController.getItemById);

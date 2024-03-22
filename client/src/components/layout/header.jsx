@@ -1,10 +1,11 @@
-import { useState } from "react";
+import { useState, useEffect} from "react";
 import {Formik} from 'formik';
 import { Link } from 'react-router-dom';
 import { Button, Box} from "@mui/material";
 import OutlinedInput from '@mui/material/OutlinedInput';
 import styled from "@emotion/styled";
 import colorTheme from "./colorTheme";
+import axios from 'axios';
 
 const user_data = {
     id: 3,
@@ -53,11 +54,39 @@ const SearchInput = styled(OutlinedInput) ({
     height: "3em",
 });
 
-const SearchForm = () => {
+const SearchForm = ({setData}) => {
+    const [query, setQuery] = useState("");
+    // const [data, setData] = useState([]);
+
+    // useEffect(() => {
+    // const getAllItems = async () => {
+    //     const Items = await axios.get(`/items/search?q=${query}`);
+    //     console.log(Items.data);
+    //     setData(Items.data);
+    // };
+    // getAllItems();
+
+    // }, [])
+
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        try {
+            const response = await axios.get('/items/search', { params: { q: query } });
+            console.log(response.data);
+            setData(response.data);
+        } catch (error) {
+            console.error('Error fetching search results:', error);
+    }
+};
     return(
-        <Formik style={{width: "100%"}}>
-            <form action="/search" method="POST" style={{width: "100%"}}>
-                <SearchInput placeholder="Search..." name="search_for"/>
+        <Formik  style={{width: "100%"}}>
+            <form  onSubmit={handleSubmit} style={{width: "100%"}}>
+                <SearchInput 
+                    placeholder="Search..." 
+                    name="search_for"
+                    onChange={e => setQuery(e.target.value)}
+                    />
             </form>
         </Formik>
     )
@@ -159,9 +188,11 @@ const CategoriesPanel = ({data, visibility}) => {
     )
 };
 
-const Header = ({data = user_data ? user_data : null}) => {
+const Header = ({data = user_data ? user_data : null,setData}) => {
 
     const [isVisible, setIsVisible] = useState(false);
+    // const [query, setQuery] = useState("");
+    // console.log(query);
     const toggleCategoriesVisibility = () => {
         setIsVisible(!isVisible);
     };
@@ -175,7 +206,7 @@ const Header = ({data = user_data ? user_data : null}) => {
             </Link>
 
             <Nav>
-                <SearchForm/>
+                <SearchForm setData={setData}/>
                 <Box sx={{width: "100%", display: "flex", justifyContent: "space-evenly"}}>
                     <Button variant="contained"
                             href="/items/create"

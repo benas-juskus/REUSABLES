@@ -3,7 +3,9 @@ import { PrismaClient } from "@prisma/client";
 import { Decimal } from "@prisma/client/runtime/library";
 var fs = require("node:fs/promises");
 
-const prisma = new PrismaClient();
+const prisma = new PrismaClient({
+  log: ['query', 'info', 'warn', 'error']
+});
 
 function hasMessage(x: unknown): x is { message: string } {
   return Boolean(
@@ -43,6 +45,51 @@ module.exports = {
       }
     }
   },
+  searchItems: async function (req: Request, res: Response) {
+    // const q: string = "lap";
+    const q: string = req.query.q as string;
+    console.log(q);
+    const searchResult: any = [];
+
+    // try {
+    //   const searchByName = await prisma.$queryRaw `SELECT * FROM Items WHERE name LIKE '%${q}%'`;
+      
+   
+     
+    try {
+      const searchByName = await prisma.items.findMany({
+        where: {
+          name: {
+            contains: q,
+          }
+        },
+      });
+      const searchByDescription = await prisma.items.findMany({
+        where: {
+          description: {
+            contains: q,
+          }
+        },
+      })
+      console.log(searchByName);
+      searchResult.push( ...searchByName,...searchByDescription);
+      const uniqueSearchResult = searchResult.filter((item: any, index: number, self: any) =>
+        index === self.findIndex((t: any) => (
+         t.id === item.id
+        ))
+      );
+      console.log("rez",uniqueSearchResult);
+      
+      res.status(200).json(uniqueSearchResult);
+          
+    } catch (error) {
+      if (hasMessage(error)) {
+        console.log(error);
+        res.status(500).json({ msg: error.message });
+      }
+    }
+},
+
   getItemById: async function (req: Request, res: Response) {
     try {
       const response = await prisma.items.findUnique({
