@@ -18,8 +18,19 @@ if (createdUsers && createdCategories && createdSubCategories) {
           const randomCategory = createdCategories[Math.floor(Math.random() * createdCategories.length)];
           const subcategories = await prisma.subCategories.findMany({ where: { category_id: randomCategory.id } });
           const randomSubcategory = subcategories[Math.floor(Math.random() * subcategories.length)];
+
+          const userPhotos = await prisma.gallery.findMany({
+            where: {
+                user_id: user.id
+            },
+            select: {
+                id: true
+            }
+        });
+
+        const randomUserPhotos = userPhotos[Math.floor(Math.random() * userPhotos.length)];
       
-          const newItem = FakeItems.create(user.id, randomSubcategory.id);
+          const newItem = FakeItems.create(user.id, randomSubcategory.id, randomUserPhotos.id);
           createdItems.push(newItem);
         }
       }

@@ -1,0 +1,115 @@
+ {
+    "Categories": [
+      {
+        "title": "Electronics",
+        "nr": 1,
+        "SubCategories": [
+          {"title": "Smartphones"},
+          {"title": "Laptops"},
+          {"title": "Cameras"},
+          {"title": "Headphones"},
+          {"title": "Tablets"}
+        ]
+      },
+      {
+        "title": "Clothing",
+        "nr": 2,
+        "SubCategories": [
+          {"title": "T-shirts"},
+          {"title": "Jeans"},
+          {"title": "Dresses"},
+          {"title": "Sweaters"},
+          {"title": "Jackets"}
+        ]
+      },
+      {
+        "title": "Home & Kitchen",
+        "nr": 3,
+        "SubCategories": [
+          {"title": "Cookware"},
+          {"title": "Furniture"},
+          {"title": "Appliances"},
+          {"title": "Utensils"},
+          {"title": "Bedding"}
+        ]
+      },
+      {
+        "title": "Books",
+        "nr": 4,
+        "SubCategories": [
+          {"title": "Fiction"},
+          {"title": "Non-fiction"},
+          {"title": "Biographies"},
+          {"title": "Fantasy"},
+          {"title": "Self-help"}
+        ]
+      },
+      {
+        "title": "Sports & Outdoors",
+        "nr": 5,
+        "SubCategories": [
+          {"title": "Fitness Equipment"},
+          {"title": "Camping Gear"},
+          {"title": "Hiking Gear"},
+          {"title": "Bicycles"},
+          {"title": "Outdoor Clothing"}
+        ]
+      },
+      {
+        "title": "Toys & Games",
+        "nr": 6,
+        "SubCategories": [
+          {"title": "Board Games"},
+          {"title": "Dolls & Action Figures"},
+          {"title": "Puzzles"},
+          {"title": "Outdoor Toys"},
+          {"title": "Educational Toys"}
+        ]
+      },
+      {
+        "title": "Beauty & Personal Care",
+        "nr": 7,
+        "SubCategories": [
+          {"title": "Skincare"},
+          {"title": "Makeup"},
+          {"title": "Hair Care"},
+          {"title": "Fragrances"},
+          {"title": "Personal Hygiene"}
+        ]
+      },
+      {
+        "title": "Automotive",
+        "nr": 8,
+        "SubCategories": [
+          {"title": "Car Parts"},
+          {"title": "Car Accessories"},
+          {"title": "Car Care"},
+          {"title": "Motorcycle Gear"},
+          {"title": "Tools & Equipment"}
+        ]
+      },
+      {
+        "title": "Pets",
+        "nr": 9,
+        "SubCategories": [
+          {"title": "Dog Supplies"},
+          {"title": "Cat Supplies"},
+          {"title": "Bird Supplies"},
+          {"title": "Aquarium & Fish"},
+          {"title": "Small Animal Supplies"}
+        ]
+      },
+      {
+        "title": "Health & Wellness",
+        "nr": 10,
+        "SubCategories": [
+          {"title": "Vitamins & Supplements"},
+          {"title": "Fitness Accessories"},
+          {"title": "Health Monitors"},
+          {"title": "First Aid"},
+          {"title": "Relaxation & Stress Relief"}
+        ]
+      }
+    ]
+  }
+  
