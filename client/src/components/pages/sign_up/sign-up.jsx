@@ -125,7 +125,7 @@ const Registration = () => {
           validationSchema={validationSchema}
         >
           {({ values, errors, touched, handleBlur, handleChange, handleSubmit, isSubmitting }) => (
-            <form onSubmit={handleSubmit} className="form">
+            <form onSubmit={handleSubmit} className="form" style={{width:"100%"}}>
               <Box width={300} sx={{ mb: 2, width: "100%", display: "flex" }}>
                 <PersonIcon sx={{ color: "action.active", mr: 1, mt: 2 }} />
                 <InputField
