@@ -8,19 +8,22 @@ datasource db {
 }
 
 model Users {
-  id             Int              @id @default(autoincrement()) @db.UnsignedInt
-  username       String
-  email          String           @unique
-  password       String
-  Role           Roles            @relation(fields: [role_id], references: [id])
-  role_id        Int              @db.UnsignedTinyInt
-  createdAt      DateTime         @default(now())
-  FavouriteItems FavouriteItems[]
-  Items          Items[]
-  Location       Locations[]
-  Notifications  Notifications[]
-  Tokens         Tokens[]
-  Image          Gallery[]
+  id                Int              @id @default(autoincrement()) @db.UnsignedInt
+  username          String
+  email             String           @unique
+  password          String
+  Role              Roles            @relation(fields: [role_id], references: [id])
+  role_id           Int              @db.UnsignedTinyInt
+  createdAt         DateTime         @default(now())
+  FavouriteItems    FavouriteItems[]
+  Items             Items[]
+  Location          Locations[]
+  Notifications     Notifications[]
+  Tokens            Tokens[]
+  Image             Gallery[]
+  user1Transactions Transactions[]   @relation("user1")
+  user2Transactions Transactions[]   @relation("user2")
+  Ratings           Ratings[]
 
   @@unique([username, email])
   @@unique([username, password])
@@ -49,24 +52,26 @@ model FavouriteItems {
 }
 
 model Items {
-  id               Int              @id @default(autoincrement()) @db.UnsignedInt
-  Users            Users            @relation(fields: [users_id], references: [id])
-  users_id         Int              @db.UnsignedInt
-  SubCategories    SubCategories    @relation(fields: [subCategories_id], references: [id])
-  subCategories_id Int              @db.UnsignedMediumInt
-  name             String
-  description      String
-  photo            Gallery          @relation(fields: [photo_id], references: [id])
-  photo_id         Int              @db.UnsignedInt
-  price            Decimal          @db.Decimal(10, 2)
-  for_sale         Boolean
-  exchange         Boolean
-  visibility       Boolean
-  created_at       DateTime         @default(now())
-  updated_at       DateTime         @updatedAt
-  ExchangeTo       ExchangeTo[]
-  FavouriteItems   FavouriteItems[]
-  Notifications    Notifications[]
+  id                Int              @id @default(autoincrement()) @db.UnsignedInt
+  Users             Users            @relation(fields: [users_id], references: [id])
+  users_id          Int              @db.UnsignedInt
+  SubCategories     SubCategories    @relation(fields: [subCategories_id], references: [id])
+  subCategories_id  Int              @db.UnsignedMediumInt
+  name              String
+  description       String
+  photo             Gallery          @relation(fields: [photo_id], references: [id])
+  photo_id          Int              @db.UnsignedInt
+  price             Decimal          @db.Decimal(10, 2)
+  for_sale          Boolean
+  exchange          Boolean
+  visibility        Boolean
+  created_at        DateTime         @default(now())
+  updated_at        DateTime         @updatedAt
+  ExchangeTo        ExchangeTo[]
+  FavouriteItems    FavouriteItems[]
+  Notifications     Notifications[]
+  item1Transactions Transactions[]   @relation("item1")
+  item2Transactions Transactions[]   @relation("item2")
 }
 
 model SubCategories {
@@ -119,4 +124,49 @@ model Gallery {
   user_id Int     @db.UnsignedInt
   photo   String
   Items   Items[]
+}
+
+model Transactions {
+  id          Int        @id @default(autoincrement()) @db.UnsignedInt
+  user1       Users      @relation("user1", fields: [user1_id], references: [id])
+  user1_id    Int        @db.UnsignedInt
+  user2       Users      @relation("user2", fields: [user2_id], references: [id])
+  user2_id    Int        @db.UnsignedInt
+  item1       Items      @relation("item1", fields: [item1_id], references: [id])
+  item1_id    Int        @db.UnsignedInt
+  item2       Items?     @relation("item2", fields: [item2_id], references: [id])
+  item2_id    Int?       @db.UnsignedInt
+  user1_conf  Boolean
+  user2_conf  Boolean
+  final_price Decimal    @db.Decimal(10, 2)
+  created_at  DateTime   @default(now())
+  Ratings     Ratings[]
+  Messages    Messages[]
+}
+
+model Ratings {
+  transaction_id Int          @db.UnsignedInt
+  transaction    Transactions @relation(fields: [transaction_id], references: [id])
+  user_id        Int          @db.UnsignedInt
+  user           Users        @relation(fields: [user_id], references: [id])
+  rater_id       Int          @db.UnsignedInt
+  rate           Int
+  comment        String?
+  created_at     DateTime     @default(now())
+
+  @@id([transaction_id, user_id])
+}
+
+model Messages {
+  id             Int          @id @default(autoincrement()) @db.UnsignedInt
+  transaction_id Int          @db.UnsignedInt
+  transaction    Transactions @relation(fields: [transaction_id], references: [id])
+  user_nr        Int          @db.UnsignedTinyInt
+  message        String
+  seen           Boolean
+  created_at     DateTime     @default(now())
+}
+
+model Censorship {
+  string String @id
 }
