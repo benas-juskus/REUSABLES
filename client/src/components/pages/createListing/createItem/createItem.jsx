@@ -1,9 +1,12 @@
 import React, { useEffect, useState, useCallback } from "react";
-import { useDropzone } from 'react-dropzone'
+import { useDropzone } from "react-dropzone";
+import DeleteIcon from "@mui/icons-material/Delete";
+import PhotoSizeSelectActualIcon from '@mui/icons-material/PhotoSizeSelectActual';
 import "../stylesheet.css";
 
 const CreateItem = () => {
   const [reloadData, setReloadData] = useState(false);
+  const [message, setMessage] = useState("");
   const [categories, Categories] = useState([]);
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
@@ -14,16 +17,46 @@ const CreateItem = () => {
   const [subcategories_id, setsubcategories_id] = useState("");
   const [tradecategoryId, settradeCategoryId] = useState("");
   const [tradesubcategories_id, settradesubcategories_id] = useState("");
-  const [photo, setPhoto] = useState(null);
+  const [photo, setPhoto] = useState([]);
   const [price, setPrice] = useState("");
   const [subcategories, setSubcategories] = useState([]);
   const [tradesubcategories, setTradeSubcategories] = useState([]);
 
+  const onDrop = useCallback((acceptedFiles) => {
+    setPhoto((prevPhotos) => {
+      const newPhotos = [...prevPhotos, ...acceptedFiles];
+      if (newPhotos.length > 5) {
+        setMessage(message + "You can only upload up to 5 photos");
+        return prevPhotos; // Return the previous state without modifying it
+      } else {
+        setMessage("")
+        return newPhotos;
+      }
+    });
+  }, []);
 
-  const onDrop = useCallback(acceptedFiles => {
-    setPhoto(acceptedFiles[0]);
-  }, [])
-  const {getRootProps, getInputProps, isDragActive} = useDropzone({onDrop})
+  const deletePhoto = (number) => {
+    console.log("function called");
+    setPhoto((oldValues) => {
+      setMessage("")
+      return oldValues.filter((photo, index) => index !== number);
+    });
+  };
+  const makeThumbnail = (number) => {
+    setMessage("")
+    setPhoto(oldValues => {
+      if (number > 0 && number < oldValues.length) {
+        const firstPhoto = oldValues[0];
+        const newValues = [...oldValues];
+        newValues[0] = newValues[number];
+        newValues[number] = firstPhoto;
+        return newValues;
+      }
+      return oldValues; // If number is invalid, return the original array
+    });
+  }
+
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
 
   //Fetch categories
   useEffect(() => {
@@ -156,22 +189,116 @@ const CreateItem = () => {
         }
       >
         <div class="StyledMain">
-        <div {...getRootProps()}>
-        {photo ? (
-          <img src={URL.createObjectURL(photo)} alt="" />
-          ) : (
-            <div class="dropzone">
-              <img src="https://st3.depositphotos.com/23594922/31822/v/450/depositphotos_318221368-stock-illustration-missing-picture-page-for-website.jpg" alt="" />              
-              <p>Select files or drag and drop them here</p>
+          <div>
+             <p className={message ? "message show" : "message"}>{message}</p>
+              
+              <div class="dropzone" className={isDragActive ? "drag-active" : ""}>
+              {photo.length !== 5 && isDragActive ? <p class="dropzoneAction">Drop the files here ...</p> : null}
+              <div class="top photos">
+                <img
+                  {...getRootProps()}
+                  src={
+                    photo[0]
+                      ? URL.createObjectURL(photo[0])
+                      : "https://st3.depositphotos.com/23594922/31822/v/450/depositphotos_318221368-stock-illustration-missing-picture-page-for-website.jpg"
+                  }
+                  alt=""
+                />
+                 {photo[0] ? (<>
+                  <div class="buttons">
+                    <button type="button" onClick={() => deletePhoto(0)}>
+                      <DeleteIcon />
+                    </button>
+                    </div>
+                    <p class="ThumbnailMessage">Thumbnail photo</p>
+                    </>
+                  ) : null}
+              </div>
+              <div class="bottom">
+                <div class="photos">
+                  <img
+                    {...getRootProps()}
+                    src={
+                      photo[1]
+                        ? URL.createObjectURL(photo[1])
+                        : "https://st3.depositphotos.com/23594922/31822/v/450/depositphotos_318221368-stock-illustration-missing-picture-page-for-website.jpg"
+                    }
+                    alt=""
+                  />
+                  {photo[1] ? (
+                    <div class="buttons">
+                    <button type="button" onClick={() => deletePhoto(1)}>
+                      <DeleteIcon />
+                    </button>
+                    <button type="button" onClick={() => makeThumbnail(1)}><PhotoSizeSelectActualIcon/></button>
+                  </div>
+                  ) : null}
+                </div>
+                <div class="photos">
+                  <img
+                    {...getRootProps()}
+                    src={
+                      photo[2]
+                        ? URL.createObjectURL(photo[2])
+                        : "https://st3.depositphotos.com/23594922/31822/v/450/depositphotos_318221368-stock-illustration-missing-picture-page-for-website.jpg"
+                    }
+                    alt=""
+                  />
+                  {photo[2] ? (
+                   <div class="buttons">
+                   <button type="button" onClick={() => deletePhoto(2)}>
+                     <DeleteIcon />
+                   </button>
+                   <button type="button" onClick={() => makeThumbnail(2)}><PhotoSizeSelectActualIcon/></button>
+                 </div>
+                  ) : null}
+                </div>
+                <div class="photos">
+                  <img
+                    {...getRootProps()}
+                    src={
+                      photo[3]
+                        ? URL.createObjectURL(photo[3])
+                        : "https://st3.depositphotos.com/23594922/31822/v/450/depositphotos_318221368-stock-illustration-missing-picture-page-for-website.jpg"
+                    }
+                    alt=""
+                  />
+                  {photo[3] ? (
+                   <div class="buttons">
+                   <button type="button" onClick={() => deletePhoto(3)}>
+                     <DeleteIcon />
+                   </button>
+                   <button type="button" onClick={() => makeThumbnail(3)}><PhotoSizeSelectActualIcon/></button>
+                 </div>
+                  ) : null}
+                </div>
+                <div class="photos">
+                  <img
+                    {...getRootProps()}
+                    src={
+                      photo[4]
+                        ? URL.createObjectURL(photo[4])
+                        : "https://st3.depositphotos.com/23594922/31822/v/450/depositphotos_318221368-stock-illustration-missing-picture-page-for-website.jpg"
+                    }
+                    alt=""
+                  />
+                  {photo[4] ? (
+                   <div class="buttons">
+                   <button type="button" onClick={() => deletePhoto(4)}>
+                     <DeleteIcon />
+                   </button>
+                   <button type="button" onClick={() => makeThumbnail(4)}><PhotoSizeSelectActualIcon/></button>
+                 </div>
+                  ) : null}
+                </div>
+              </div>
+              {photo.length !== 5 && <p>Select files or drag and drop them here</p>}
+             
             </div>
-          )} 
-                     
-      <input {...getInputProps()} />
-      {
-        isDragActive ? (
-          <p>Drop the files here ...</p>
-      ) : null}
-    </div>
+
+            <input {...getInputProps()} />
+          
+          </div>
 
           <div class="middle">
             <div>
@@ -218,7 +345,7 @@ const CreateItem = () => {
             </div>
 
             <div>
-              <div> 
+              <div>
                 <label for="for_sale">For sale</label>
                 <input
                   type="checkbox"
@@ -227,19 +354,17 @@ const CreateItem = () => {
                   value={for_sale}
                   onChange={handlefor_saleChange}
                 />
-               
+
                 {for_sale ? (
-                
-                    <input
+                  <input
                     placeholder="Item price"
-                      type="number"
-                      min={0}
-                      name=""
-                      id=""
-                      value={price}
-                      onChange={(e) => setPrice(e.target.value)}
-                    />
-              
+                    type="number"
+                    min={0}
+                    name=""
+                    id=""
+                    value={price}
+                    onChange={(e) => setPrice(e.target.value)}
+                  />
                 ) : null}
               </div>
               <div>
@@ -251,47 +376,45 @@ const CreateItem = () => {
                   value={exchange}
                   onChange={handleexchangeChange}
                 />
-                
+
                 {exchange ? (
                   <div>
                     <label>I want to exchange this to:</label>
                     <div>
+                      <label>Category:</label>
+                      {/* I didnt find the controller for exchange to table so this function does not fetch any data to the server right now */}
+                      <select
+                        name="category"
+                        value={tradecategoryId}
+                        onChange={(event) => handleTradeCategoryChange(event)}
+                      >
+                        <option value="">Select a category</option>
+                        {categories.map((category) => (
+                          <option key={category.id} value={category.id}>
+                            {category.title}
+                          </option>
+                        ))}
+                      </select>
 
-
-              <label>Category:</label>
-                  {/* I didnt find the controller for exchange to table so this function does not fetch any data to the server right now */}
-              <select
-                name="category"
-                value={tradecategoryId}
-                onChange={(event) => handleTradeCategoryChange(event)}
-              >
-                <option value="">Select a category</option>
-                {categories.map((category) => (
-                  <option key={category.id} value={category.id}>
-                    {category.title}
-                  </option>
-                ))}
-              </select>
-
-              {/* Render available subcategories after selecting a category */}
-              {tradesubcategories.length > 0 && (
-                <div>
-                  <label>Subcategories:</label>
-                  <select
-                    value={tradesubcategories_id}
-                    onChange={(e) => settradesubcategories_id(e.target.value)}
-                  >
-                    {tradesubcategories.map((tradesubcategory) => (
-                      <option value={tradesubcategory.id}>
-                        {tradesubcategory.title}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              )}
-            </div>
-                  
-
+                      {/* Render available subcategories after selecting a category */}
+                      {tradesubcategories.length > 0 && (
+                        <div>
+                          <label>Subcategories:</label>
+                          <select
+                            value={tradesubcategories_id}
+                            onChange={(e) =>
+                              settradesubcategories_id(e.target.value)
+                            }
+                          >
+                            {tradesubcategories.map((tradesubcategory) => (
+                              <option value={tradesubcategory.id}>
+                                {tradesubcategory.title}
+                              </option>
+                            ))}
+                          </select>
+                        </div>
+                      )}
+                    </div>
                   </div>
                 ) : null}
               </div>

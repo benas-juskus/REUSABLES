@@ -9,7 +9,6 @@ WORKDIR /home/node/app
 COPY --chown=node:node . ./
 USER node
 RUN npm install --loglevel warn
-RUN npm install --save react-dropzone
 EXPOSE 3000
 CMD ["npm", "start"]
 

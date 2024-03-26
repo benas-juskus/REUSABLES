@@ -1,35 +1,131 @@
 .StyledMain {
     margin: auto;
     display: flex;
-    border: 1px solid;
     padding: 10px;
 }
+
 .dropzone {
     position: relative;
-    display: flex;
-    border: 1px solid;
+    display: grid;
     justify-content: center;
     align-items: center;
     width: 300px;
     height: 300px;
 }
+.dropzoneAction {
+    position: absolute;
+}
 .dropzone p {
     position: absolute;
 }
+
 .drag-active {
     filter: brightness(1.1);
 }
-.StyledMain img {
+
+.StyledMain .top img {
     width: 300px;
     height: 300px;
-}
-.StyledMain .left {
     border: 1px solid;
 }
+
+.StyledMain .bottom img {
+    width: 100%;
+    height: 100%;
+    border: 1px solid;
+}
+
+.StyledMain .top {
+    grid-column: 1 / span 4;
+    position: relative;
+}
+
+.StyledMain .bottom {
+    display: flex;
+    justify-content: space-between;
+}
+
+.StyledMain .bottom div {
+    position: relative;
+    display: flex;
+    align-items: top;
+    width: 70px;
+    height: 70px;
+}
+
+.StyledMain .photos .buttons {
+    opacity: 0;
+    pointer-events: none;
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    width: 35px;
+    height: 35px;
+    gap: 5px;
+    left: 1px;
+    scale: 80%;
+    transition: 0.3s;
+    
+}
+
+.StyledMain .photos .buttons button {
+    cursor: pointer;
+    border-radius: 5px 5px 5px 5px;
+    transition: 0.3s;
+}
+
+.StyledMain .photos .buttons button:first-child {
+    color: red;
+    background-color: white;
+}
+.StyledMain .photos .buttons button:nth-child(2) {
+    color: blue;
+    background-color: white;
+}
+.StyledMain .top .buttons {
+    left: 20px;
+    top: 20px;
+    scale: 150%;
+}
+.StyledMain .photos:hover .buttons {
+    opacity: 1;
+    pointer-events: all;
+}
+.StyledMain .photos .buttons button:hover:first-child {
+    color: white;
+    background-color: red;
+    border-color: red;
+}
+.StyledMain .photos .buttons button:hover:nth-child(2) {
+    color: white;
+    background-color: blue;
+    border-color: blue;
+}
+
 .StyledMain .middle {
     justify-content: left;
     align-items: left;
     display: flex;
     flex-direction: column;
     gap: 10px;
+}
+.message {
+    text-align: center;
+    color: white;
+    background-color: red;
+    padding: 5px;
+    transition: 0.3s;
+    opacity: 0;
+    height: 0px;
+}
+.message.show {
+    opacity: 1;
+    height: 20px;
+}
+.ThumbnailMessage {
+    position: absolute;
+    top: -14px;
+    right: 0;
+    padding: 5px;
+    background-color: rgb(255, 255, 255, 0.5);
 }
