@@ -3,8 +3,10 @@ import Footer from "../../layout/footer";
 import React, { useState, useEffect } from "react";
 import styles1 from "./LiveFeed.module.css";
 import styles2 from "./LiveFeed.container.css";
+// import Heart from "react-animated-heart";
 
 const LiveFeedComponent = () => {
+  const [isClick, setClick] = useState(false);
   const [feedData, setFeedData] = useState([]);
   const [photoData, setPhotoData] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -68,14 +70,19 @@ const LiveFeedComponent = () => {
       <Header />
       <div className={styles1}>
         <div id="container" className={styles2}>
-          <h2>Live Feed</h2>
+          <h2>&nbsp;</h2>
           <ul>
             {feedData &&
               feedData.map((item, index) => (
-                <li key={item.id} style={{ width: "20%" }}>
-                  <img src="https://images.unsplash.com/photo-1707343843344-011332037abb?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" />
-                  , <br /> {item.name}, <br /> {item.price} &euro; <br />
-                  <button>Add to cart</button> <button>Add to wishlist</button>
+                <li key={item.id} style={{ width: "19%" }}>
+                  <a href="#"><img src="https://images.unsplash.com/photo-1707343843344-011332037abb?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" /> </a>
+                   <br />
+                   <div style={{textAlign:'left', marginLeft:'2.3rem', marginBottom:'20px', fontWeight:'bold'}}> {item.SubCategories.title}
+                   {/* <Heart isClick={isClick} onClick={() => setClick(!isClick)} /> */}
+                   </div>
+                    <h2>{item.name}</h2>  <span style={{fontFamily:'monospace', fontWeight:'bold'}}> {item.price}</span> <span style={{color:" hsl(0, 0%, 25%) ", fontWeight:'bold'}}> &euro; </span><br />
+                  {/* <button>Add to cart</button> <button>Add to wishlist</button> */}
+                  <button>Trade</button> <button>Like</button>
                 </li>
               ))}
           </ul>

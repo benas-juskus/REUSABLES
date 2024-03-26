@@ -49,17 +49,20 @@ module.exports = {
         select: { id: true },
       });
       const idArray = everyID.map((element) => element.id);
-      let randomIndexes = [];
-      let randomIdsFromTable = [];
-      for (let i = 0; i < 5; i++) {
-        randomIndexes.push(Math.floor(Math.random() * idArray.length));
-        randomIdsFromTable.push(idArray[randomIndexes[i]])
+      let randomIndexes: number[] = [];
+      let randomIdsFromTable: number[] = [];
+      let i = 0;
+      while (i < 5) {
+        let randomIndex = Math.floor(Math.random() * idArray.length);
+        if (!randomIndexes.includes(randomIndex)) {
+          randomIndexes.push(randomIndex);
+          randomIdsFromTable.push(idArray[randomIndex]);
+          i++;
+        }
       }
-      console.log(randomIndexes)
-      console.log(randomIdsFromTable);
-      
       const randomElementsFromTable = await prisma.items.findMany({
         where: { id: { in: randomIdsFromTable } },
+        include: { SubCategories: true },
       });
       res.status(200).json(randomElementsFromTable);
     } catch (error) {
