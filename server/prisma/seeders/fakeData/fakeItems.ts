@@ -23,7 +23,7 @@ const FakeItems = {
             // id: faker.number.int(),
             users_id: users_id,
             subCategories_id: subCategoriesId,
-            name: faker.commerce.productName(),
+            name: faker.commerce.product(),
             description: faker.commerce.productDescription(),
             photo_id: photo_id,
             price: faker.number.float({ min: 0, max: 1000 }),

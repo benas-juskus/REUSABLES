@@ -3,7 +3,7 @@ import FakeUser from "./fakeData/fakeUser";
 
 const prisma = new PrismaClient();
 const userSeed = async () => {
-    const usersList = FakeUser.createMany(10);
+    const usersList = FakeUser.createMany(15);
     //   console.log("Generated users:", usersList);
 
       const createdUsers = await prisma.users.createMany({

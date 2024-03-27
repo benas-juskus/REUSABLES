@@ -10,6 +10,9 @@ import locationsSeed from './seeders/locationsSeed';
 import favouriteSeed from "./seeders/favouriteSeed";
 import exchangeToSeed from "./seeders/exchangeToSeed";
 import notificationsSeed from "./seeders/notificationsSeed";
+import transactionsSeed from "./seeders/transactionsSeed";
+import ratingsSeed from "./seeders/ratingsSeed";
+import messagesSeed from "./seeders/messagesSeed";
 
 
 
@@ -29,15 +32,18 @@ async function main() {
     //   console.log("Seeding already done");
     //   return;
     // } else {
-     await rolesSeed();
-     await userSeed()
-     await categoriesSeed()
-     await gallerySeed()
-     await itemsSeed()
-     await locationsSeed()
-     await favouriteSeed()
-     await exchangeToSeed()
-     await notificationsSeed()
+    //  await rolesSeed();
+    //  await userSeed()
+    //  await categoriesSeed()
+    //  await gallerySeed()
+    //  await itemsSeed()
+    //  await locationsSeed()
+    //  await favouriteSeed()
+    //  await exchangeToSeed()
+    //  await notificationsSeed()
+     await transactionsSeed()
+     await ratingsSeed()
+     await messagesSeed()
 
     // }
   } catch (error) {
