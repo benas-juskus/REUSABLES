@@ -20,7 +20,7 @@ const SingleChatPreview = ({transaction}) => {
                     margin: "0 0",
                     color: "black", 
                     width: "100%", 
-                    minHeight: "100%", 
+                    heightht: "100%", 
                     backgroundColor: colorTheme.palette.secondary.main}}>
                 <p>Chat with username</p>
                 <small>{transaction.item2_id ? `Trading ${transaction.item1_id} and ${transaction.item2_id}` : `Selling ${transaction.item1_id}`}</small>
@@ -30,7 +30,7 @@ const SingleChatPreview = ({transaction}) => {
     )
 }
 
-const RecentChats = ({transactions}) => {
+const RecentChats = ({transactions, width}) => {
     return (
         <Box sx={{
                 boxShadow: 1, 
@@ -40,8 +40,9 @@ const RecentChats = ({transactions}) => {
                 alignItems: "center",
                 minHeight: "100%", 
                 maxHeight: "100%", 
-                width: "30%", 
+                width: `${(width) ? `${width}` : "30%"}`, 
                 backgroundColor: colorTheme.palette.secondary.light}}>
+                    {console.log(width)}
             <Box sx={{
                     scrollbarWidth: "none" , 
                     overflowY: "scroll", 
