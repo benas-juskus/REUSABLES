@@ -1,4 +1,4 @@
--- Active: 1706249936793@@127.0.0.1@3306@prisma
+-- Active: 1713249587428@@127.0.0.1@3306@prisma
 USE prisma;
 
 INSERT INTO Gallery (user_id, photo)
