@@ -19,9 +19,6 @@ app.use(express.json());
 app.use(cors());
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, "public")));
-app.get("/", (req: Request, res: Response) => {
-  res.send("Hello World!");
-});
 
 const CategoriesRouter = require("./routes/CategoriesRoute");
 app.use("/categories/", CategoriesRouter);

@@ -43,6 +43,62 @@ module.exports = {
       }
     }
   },
+  get5RandomItems: async function (req: Request, res: Response) {
+    try {
+      const everyID = await prisma.items.findMany({
+        select: { id: true },
+      });
+      const idArray = everyID.map((element) => element.id);
+      let randomIndexes: number[] = [];
+      let randomIdsFromTable: number[] = [];
+      let i = 0;
+      while (i < 5) {
+        let randomIndex = Math.floor(Math.random() * idArray.length);
+        if (!randomIndexes.includes(randomIndex)) {
+          randomIndexes.push(randomIndex);
+          randomIdsFromTable.push(idArray[randomIndex]);
+          i++;
+        }
+      }
+      const randomElementsFromTable = await prisma.items.findMany({
+        where: { id: { in: randomIdsFromTable } },
+        include: { SubCategories: true },
+      });
+      res.status(200).json(randomElementsFromTable);
+    } catch (error) {
+      if (hasMessage(error)) {
+        res.status(500).json({ msg: error.message });
+      }
+    }
+  },
+  get3RandomItems: async function (req: Request, res: Response) {
+    try {
+      const everyID = await prisma.items.findMany({
+        select: { id: true },
+      });
+      const idArray = everyID.map((element) => element.id);
+      let randomIndexes: number[] = [];
+      let randomIdsFromTable: number[] = [];
+      let i = 0;
+      while (i < 3) {
+        let randomIndex = Math.floor(Math.random() * idArray.length);
+        if (!randomIndexes.includes(randomIndex)) {
+          randomIndexes.push(randomIndex);
+          randomIdsFromTable.push(idArray[randomIndex]);
+          i++;
+        }
+      }
+      const randomElementsFromTable = await prisma.items.findMany({
+        where: { id: { in: randomIdsFromTable } },
+        include: { SubCategories: true },
+      });
+      res.status(200).json(randomElementsFromTable);
+    } catch (error) {
+      if (hasMessage(error)) {
+        res.status(500).json({ msg: error.message });
+      }
+    }
+  },
   getItemById: async function (req: Request, res: Response) {
     try {
       const response = await prisma.items.findUnique({

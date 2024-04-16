@@ -44,4 +44,16 @@ module.exports = {
       }
     }
   },
+  getAllPhotos: async function (req: Request, res: Response) {
+    try {
+      const photo = await prisma.gallery.findMany({
+        select: { photo: true}
+      });
+      res.status(201).json({status: "Success", data: {photo}})
+    } catch (error) {
+      if (hasMessage(error)) {
+        res.status(500).json({ msg: error.message });
+      }
+    }
+  },
 };
