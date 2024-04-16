@@ -1,10 +1,11 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import App from './app/app'
+// import App from './app/app'
 import Login from './components/pages/login/login'
-import Dashboard from  './components/pages/dashboard/dashboard';
+// import Dashboard from  './components/pages/dashboard/dashboard';
 import SignUp from './components/pages/sign_up/sign-up'
 import ForgotPassword from './components/pages/forgot_password/forgot-pasword'
+import ItemPage from './components/pages/item/item'
 import {
   createBrowserRouter,
   createRoutesFromElements,
